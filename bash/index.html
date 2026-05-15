@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bash | Modern Web Development, AI & Robotics Solutions</title>
+    <meta name="description" content="Bash is a technology company specializing in high-performance web development, AI & Machine Learning, Robotics, and 3D Printing solutions. Transforming ideas into future-ready products.">
+    <meta name="keywords" content="Web Development, AI, Machine Learning, Robotics, 3D Printing, Technology Solutions">
+
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="Bash | Tech Solutions for the Future">
+    <meta property="og:description" content="We build modern websites, intelligent AI systems, and advanced robotics.">
+    <meta property="og:image" content="./hero-bg.webp">
+    <meta property="og:url" content="https://bash.tech">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=2.0" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <header class="site-header" id="header">
+      <a class="brand" href="#">&lt;/&gt;Bash</a>
+      <nav class="site-nav">
+        <a href="#">Home</a>
+        <a href="#about">About</a>
+        <a href="#webdev">Services</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <a href="./admin.html">Admin</a>
+      </nav>
+      <button class="auth-btn" id="authToggleBtn">Sign In</button>
+    </header>
+
+    <div class="auth-modal" id="authModal">
+      <!-- ... existing auth modal content ... -->
+      <div class="auth-modal-content">
+        <button class="auth-close" id="authClose">&times;</button>
+        <div class="auth-header">
+          <h2 id="authTitle">Welcome Back</h2>
+          <p id="authSubtitle">Sign in to your account</p>
+        </div>
+        <form id="authForm">
+          <div class="auth-field" id="nameField" style="display: none;">
+            <input type="text" id="authName" placeholder="Full Name" />
+          </div>
+          <div class="auth-field">
+            <input type="email" id="authEmail" placeholder="Email" required />
+          </div>
+          <div class="auth-field">
+            <input type="password" id="authPassword" placeholder="Password" required />
+          </div>
+          <button type="submit" class="auth-submit" id="authSubmit">Sign In</button>
+        </form>
+        <div class="auth-divider">
+          <span>or continue with</span>
+        </div>
+        <div class="social-buttons">
+          <button class="social-btn" id="googleBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Google
+          </button>
+        </div>
+        <div class="auth-switch">
+          <span id="authSwitchText">Don't have an account?</span>
+          <button class="auth-switch-btn" id="authSwitchBtn">Sign Up</button>
+        </div>
+        <div class="auth-user" id="authUser" style="display: none;">
+          <span id="userEmail"></span>
+          <button class="auth-signout" id="signOutBtn">Sign Out</button>
+        </div>
+        <p class="auth-message" id="authMessage"></p>
+      </div>
+    </div>
+
+    <!-- Project Registration Modal -->
+    <div class="auth-modal" id="projectModal">
+      <!-- ... existing project modal content ... -->
+      <div class="auth-modal-content project-modal-content">
+        <button class="auth-close" id="projectClose">&times;</button>
+        <div class="auth-header">
+          <h2>Project Brief</h2>
+          <p>Define your vision and build requirements</p>
+        </div>
+        <form id="projectRegForm">
+          <div class="auth-form-grid">
+            <div class="auth-field">
+              <label>Project Name</label>
+              <input type="text" id="projName" class="auth-input" placeholder="e.g. Nexus Dashboard" required />
+            </div>
+            <div class="auth-field">
+              <label>Work Type</label>
+              <div class="auth-select-wrapper" id="workTypeSelect">
+                <div class="auth-select-trigger">
+                  <span id="workTypeLabel">Select Category</span>
+                </div>
+                <div class="auth-options">
+                  <div class="auth-option" data-value="webdesigning">Web Designing</div>
+                  <div class="auth-option" data-value="webapp">Web App</div>
+                  <div class="auth-option" data-value="mobileapp">Mobile App</div>
+                  <div class="auth-option" data-value="aiml">AI & ML</div>
+                  <div class="auth-option" data-value="robotics">Robotics</div>
+                  <div class="auth-option" data-value="3ddesigning">3D Designing</div>
+                  <div class="auth-option" data-value="3dprinting">3D Printing</div>
+                </div>
+                <input type="hidden" id="projType" value="" />
+              </div>
+            </div>
+            <div class="auth-field auth-form-full">
+              <label>Overview & Goals</label>
+              <textarea id="projDesc" class="auth-input" placeholder="Describe the project scope and key features..." required></textarea>
+            </div>
+            <div class="auth-field">
+              <label>Target URL (Optional)</label>
+              <input type="url" id="projUrl" class="auth-input" placeholder="https://..." />
+            </div>
+            <div class="auth-field">
+              <label>Timeline / Deadline</label>
+              <input type="text" id="projTimeline" class="auth-input" placeholder="e.g. 3 Months" />
+            </div>
+            <div class="auth-field">
+              <label>Contact Email</label>
+              <input type="email" id="projEmail" class="auth-input" placeholder="client@example.com" required />
+            </div>
+            <div class="auth-field">
+              <label>Mobile Number</label>
+              <input type="tel" id="projPhone" class="auth-input" placeholder="+1 234 567 890" required />
+            </div>
+            <div class="auth-field auth-form-full">
+              <label>Key Requirements / Tech Stack</label>
+              <input type="text" id="projStack" class="auth-input" placeholder="e.g. React, Python, IoT, etc." />
+            </div>
+          </div>
+          <button type="submit" class="auth-submit" style="margin-top: 2rem;">INITIATE BUILD</button>
+        </form>
+        <p class="auth-message" id="projectMessage"></p>
+      </div>
+    </div>
+
+    <!-- PDF Preview Modal -->
+    <div class="auth-modal" id="previewModal">
+      <div class="auth-modal-content project-modal-content" style="max-width: 900px; height: 90vh; display: flex; flex-direction: column;">
+        <button class="auth-close" id="previewClose">&times;</button>
+        <div class="auth-header" style="margin-bottom: 1rem;">
+          <h2>Brief Preview</h2>
+          <p>Review your build initiation document</p>
+        </div>
+        <div style="flex: 1; background: #000; border-radius: 0.5rem; overflow: hidden; margin-bottom: 1.5rem;">
+          <iframe id="pdfViewer" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+          <button class="auth-btn" id="downloadBrief" style="background: var(--accent); color: #000;">Download PDF</button>
+          <button class="auth-btn" id="closePreview" style="background: rgba(255,255,255,0.1); color: #fff;">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-track" id="scrollTrack">
+      <main class="scene" id="scene" aria-label="Interactive workstation scene">
+        <div class="depth-layer"></div>
+
+        <section class="hero-stage" id="heroStage">
+          <canvas id="heroCanvas" class="hero-canvas"></canvas>
+          <div class="hero-shards">
+            <div class="shard s1"></div>
+            <div class="shard s2"></div>
+            <div class="shard s3"></div>
+          </div>
+          <div class="hero-image" id="heroImage"></div>
+          <div class="vignette"></div>
+          <div class="screen-focus" id="screenFocus"></div>
+          <div class="hero-actions">
+            <button class="btn-primary" id="registerWorkBtn">Build</button>
+          </div>
+        </section>
+
+        <section class="wallpaper-view" id="wallpaperView" aria-label="Laptop wallpaper fullscreen">
+          <div class="bash-logo" aria-label="</>Bash logo">
+            <span class="bash-icon">&lt;/&gt;</span>
+            <span class="bash-word">Bash</span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <main class="content" id="top">
+      <section class="section about-section" id="about" aria-label="About us">
+        <h1 class="about-title" data-animate>
+          <span class="reveal-text">ABOUT US</span>
+        </h1>
+        <div class="about-copy">
+          <p data-animate>
+            We are a forward-thinking technology company driven by innovation and creativity. Our mission
+            is to transform ideas into powerful digital and physical solutions that shape the future.
+            With expertise across multiple domains, we specialize in building modern websites and
+            applications that are fast, scalable, and user-focused. Our work extends into Artificial
+            Intelligence and Machine Learning, where we create intelligent systems that solve real-world
+            problems and enhance automation.
+          </p>
+          <p data-animate>
+            Beyond software, we explore the physical side of technology through robotics, designing smart
+            systems that bridge the gap between digital intelligence and real-world interaction. Our
+            capabilities also include 3D designing and 3D printing, allowing us to bring concepts to life
+            with precision and creativity.
+          </p>
+          <p data-animate>
+            We believe in combining technology, design, and innovation to deliver solutions that are not
+            only functional but also impactful. Whether it's a digital product or a physical prototype,
+            we focus on quality, performance, and future-ready solutions.
+          </p>
+        </div>
+      </section>
+
+      <section class="section services-heading-section" aria-label="Our Services">
+        <h2 class="services-heading" data-animate>
+          <span class="reveal-text">OUR SERVICES</span>
+        </h2>
+      </section>
+
+      <section class="webdev-section" id="webdev" aria-label="Web Development">
+        <div class="webdev-left">
+          <h2 class="webdev-title" data-animate>Web Development</h2>
+          <p class="webdev-desc" data-animate>
+            We design and develop modern, responsive, and high-performance websites tailored to your brand.
+            From business sites to advanced web applications, we focus on speed, user experience, and scalability.
+          </p>
+        </div>
+        <div class="webdev-right" data-animate aria-hidden="true">
+          <div class="code-window">
+            <div class="code-window-bar">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span class="code-window-title">terminal</span>
+            </div>
+            <pre class="code-body" id="codeBody"></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="appdev-section" id="appdev" aria-label="App Development">
+        <div class="appdev-image-container" data-animate>
+          <img src="./app-dev-bg-removed.png" alt="App Development Preview" class="appdev-final-image">
+        </div>
+        <div class="appdev-content">
+          <p class="appdev-desc" data-animate>
+            We build powerful mobile and desktop applications with intuitive interfaces and seamless performance.
+            Our apps are designed to deliver real value and engage users effectively.
+          </p>
+        </div>
+      </section>
+
+      <section class="aiml-section" id="aiml" aria-label="AI & ML">
+        <div class="aiml-content">
+          <div class="aiml-left" data-animate>
+            <div class="ai-visual">
+              <div class="ai-node n1"></div>
+              <div class="ai-node n2"></div>
+              <div class="ai-node n3"></div>
+              <div class="ai-node n4"></div>
+              <div class="ai-node n5"></div>
+              <div class="ai-connection c1"></div>
+              <div class="ai-connection c2"></div>
+              <div class="ai-connection c3"></div>
+              <div class="ai-connection c4"></div>
+            </div>
+          </div>
+          <div class="aiml-right">
+            <h2 class="aiml-title" data-animate>AI & Machine Learning</h2>
+            <p class="aiml-desc" data-animate>
+              We design and deploy intelligent systems that process data, recognize patterns, and make informed decisions.
+              Our AI solutions range from predictive modeling to computer vision, helping businesses automate complexity and unlock new insights.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="robotics-section" id="robotics" aria-label="Robotics">
+        <div class="robotics-content">
+          <div class="robotics-left">
+            <h2 class="robotics-title" data-animate>Robotics</h2>
+            <p class="robotics-desc" data-animate>
+              We bridge the gap between digital intelligence and the physical world through advanced robotics. 
+              Our focus is on designing autonomous systems and smart hardware that can interact with and manipulate 
+              their environment with precision and efficiency.
+            </p>
+          </div>
+          <div class="robotics-right" data-animate>
+            <div id="robotics-canvas-container" class="three-container"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="printing-section" id="printing" aria-label="3D Designing & Printing">
+        <div class="printing-content">
+          <div class="printing-left" data-animate>
+            <div id="printing-canvas-container" class="three-container"></div>
+          </div>
+          <div class="printing-right">
+            <h2 class="printing-title" data-animate>3D Designing & Printing</h2>
+            <p class="printing-desc" data-animate>
+              We bring digital concepts into the physical realm with high-precision 3D modeling and printing. 
+              From rapid prototyping to custom functional parts, we utilize advanced additive manufacturing 
+              techniques to deliver durable and detailed physical solutions.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section projects-section" id="projects" aria-label="Our Projects">
+        <h2 class="projects-title" data-animate>
+          <span class="reveal-text">OUR PROJECTS</span>
+        </h2>
+        <div class="projects-grid" id="projectsGrid">
+          <!-- Projects will be loaded here via JS -->
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact" aria-label="Contact Us">
+        <h2 class="contact-title" data-animate>GET IN TOUCH</h2>
+        <div class="contact-container">
+          <div class="contact-info" data-animate>
+            <p>Ready to start your next project? We're here to help you bring your ideas to life.</p>
+            <div class="contact-details">
+              <div class="detail-item">
+                <span class="detail-label">Email</span>
+                <span class="detail-value">hellobash05@gmail.com</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Location</span>
+                <span class="detail-value">Digital Nomad / Earth</span>
+              </div>
+            </div>
+          </div>
+          <form class="contact-form" action="https://formspree.io/f/YOUR_ID_HERE" method="POST" data-animate>
+            <div class="form-group">
+              <input type="text" id="name" name="name" placeholder="Name" required />
+            </div>
+            <div class="form-group">
+              <input type="email" id="email" name="email" placeholder="Email" required />
+            </div>
+            <div class="form-group">
+              <textarea id="message" name="message" rows="4" placeholder="Message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">SEND MESSAGE</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="main-footer">
+      <div class="footer-grid">
+        <div class="footer-brand" data-animate>
+          <a class="footer-logo" href="#top">&lt;/&gt;Bash</a>
+          <p class="footer-tagline">Transforming ideas into powerful digital and physical solutions that shape the future.</p>
+        </div>
+        
+        <div class="footer-links" data-animate>
+          <div class="link-col">
+            <h3>Services</h3>
+            <ul>
+              <li><a href="#webdev">Web Development</a></li>
+              <li><a href="#appdev">App Development</a></li>
+              <li><a href="#aiml">AI & ML</a></li>
+              <li><a href="#robotics">Robotics</a></li>
+              <li><a href="#printing">3D Printing</a></li>
+            </ul>
+          </div>
+          
+          <div class="link-col">
+            <h3>Connect</h3>
+            <ul>
+              <li><a href="#">LinkedIn</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">GitHub</a></li>
+              <li><a href="#">Instagram</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 &lt;/&gt;Bash. All rights reserved.</p>
+        <a href="#top" class="back-to-top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      
+      const firebaseConfig = {
+        apiKey: "AIzaSyDYb8rVWtHxvSUPmKjW4gTSO-RBobTJjqU",
+        authDomain: "bash-auth-83ce4.firebaseapp.com",
+        projectId: "bash-auth-83ce4",
+        storageBucket: "bash-auth-83ce4.firebasestorage.app",
+        messagingSenderId: "314051281852",
+        appId: "1:314051281852:web:b9a8b3fd14cd36129821b9",
+        measurementId: "G-ZY5TC8XFNC"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const googleProvider = new GoogleAuthProvider();
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const authModal = document.getElementById('authModal');
+        const authToggleBtn = document.getElementById('authToggleBtn');
+        const authClose = document.getElementById('authClose');
+        const authForm = document.getElementById('authForm');
+        const authTitle = document.getElementById('authTitle');
+        const authSubtitle = document.getElementById('authSubtitle');
+        const authSubmit = document.getElementById('authSubmit');
+        const nameField = document.getElementById('nameField');
+        const authSwitchText = document.getElementById('authSwitchText');
+        const authSwitchBtn = document.getElementById('authSwitchBtn');
+        const googleBtn = document.getElementById('googleBtn');
+        const authUser = document.getElementById('authUser');
+        const userEmail = document.getElementById('userEmail');
+        const signOutBtn = document.getElementById('signOutBtn');
+        const authMessage = document.getElementById('authMessage');
+        const authDivider = document.querySelector('.auth-divider');
+        const socialButtons = document.querySelector('.social-buttons');
+        const authSwitch = document.querySelector('.auth-switch');
+        const registerWorkBtn = document.getElementById('registerWorkBtn');
+
+        const projectModal = document.getElementById('projectModal');
+        const projectClose = document.getElementById('projectClose');
+        const projectRegForm = document.getElementById('projectRegForm');
+        const projectMessage = document.getElementById('projectMessage');
+
+        const previewModal = document.getElementById('previewModal');
+        const previewClose = document.getElementById('previewClose');
+        const closePreview = document.getElementById('closePreview');
+        const downloadBrief = document.getElementById('downloadBrief');
+        const pdfViewer = document.getElementById('pdfViewer');
+
+        let isSignUp = false;
+        let currentDoc = null; 
+
+        function openAuthModal() {
+          authModal.classList.add('active');
+          authMessage.textContent = '';
+          authMessage.className = 'auth-message';
+        }
+
+        function closeAuthModal() {
+          authModal.classList.remove('active');
+        }
+
+        function openProjectModal() {
+          projectModal.classList.add('active');
+          projectMessage.textContent = '';
+          projectMessage.className = 'auth-message';
+        }
+
+        function closeProjectModal() {
+          projectModal.classList.remove('active');
+        }
+
+        function openPreviewModal(docUrl) {
+          pdfViewer.src = docUrl;
+          previewModal.classList.add('active');
+        }
+
+        function closePreviewModal() {
+          previewModal.classList.remove('active');
+          pdfViewer.src = '';
+        }
+
+        function updateAuthUI(user) {
+          if (user) {
+            authToggleBtn.textContent = 'Account';
+            authToggleBtn.style.background = 'var(--accent)';
+            userEmail.textContent = user.email || user.displayName || 'User';
+            authUser.style.display = 'flex';
+            authForm.style.display = 'none';
+            authDivider.style.display = 'none';
+            socialButtons.style.display = 'none';
+            authSwitch.style.display = 'none';
+          } else {
+            authToggleBtn.textContent = 'Sign In';
+            authToggleBtn.style.background = '#ffffff';
+            authUser.style.display = 'none';
+            authForm.style.display = 'block';
+            authDivider.style.display = 'flex';
+            socialButtons.style.display = 'flex';
+            authSwitch.style.display = 'flex';
+          }
+          if (registerWorkBtn) registerWorkBtn.textContent = 'Build';
+        }
+
+        authToggleBtn.addEventListener('click', () => openAuthModal());
+        if (registerWorkBtn) {
+          registerWorkBtn.addEventListener('click', () => {
+            if (auth.currentUser) {
+              openProjectModal();
+            } else {
+              openAuthModal();
+            }
+          });
+        }
+
+        // Custom Select Logic
+        const workTypeSelect = document.getElementById('workTypeSelect');
+        const workTypeLabel = document.getElementById('workTypeLabel');
+        const projTypeInput = document.getElementById('projType');
+        const workTypeOptions = workTypeSelect.querySelectorAll('.auth-option');
+
+        workTypeSelect.querySelector('.auth-select-trigger').addEventListener('click', (e) => {
+          workTypeSelect.classList.toggle('open');
+          e.stopPropagation();
+        });
+
+        workTypeOptions.forEach(option => {
+          option.addEventListener('click', function() {
+            const val = this.getAttribute('data-value');
+            const text = this.textContent;
+            
+            projTypeInput.value = val;
+            workTypeLabel.textContent = text;
+            workTypeLabel.style.color = '#ffffff';
+            
+            workTypeOptions.forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+            
+            workTypeSelect.classList.remove('open');
+          });
+        });
+
+        window.addEventListener('click', () => {
+          workTypeSelect.classList.remove('open');
+        });
+
+        async function generateProjectPDF(details) {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          const accentColor = [108, 242, 207];
+
+          // Improved image to Base64 converter with safety timeout
+          const getBase64Image = (imgUrl) => {
+            return new Promise((resolve) => {
+              const timer = setTimeout(() => {
+                console.warn('Logo load timed out');
+                resolve(null);
+              }, 2000);
+
+              const img = new Image();
+              img.crossOrigin = 'Anonymous';
+              img.onload = () => {
+                clearTimeout(timer);
+                try {
+                  const canvas = document.createElement('canvas');
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+                  const ctx = canvas.getContext('2d');
+                  ctx.drawImage(img, 0, 0);
+                  resolve(canvas.toDataURL('image/png'));
+                } catch (err) {
+                  console.error('Canvas processing error:', err);
+                  resolve(null);
+                }
+              };
+              img.onerror = () => {
+                clearTimeout(timer);
+                console.warn('Logo image failed to load');
+                resolve(null);
+              };
+              img.src = imgUrl;
+            });
+          };
+
+          const logoBase64 = await getBase64Image('./logo-custom.png');
+
+          // Header - Professional Light Theme for visibility
+          doc.setFillColor(255, 255, 255);
+          doc.rect(0, 0, 210, 45, 'F');
+          
+          // Bottom border for header
+          doc.setDrawColor(accentColor[0], accentColor[1], accentColor[2]);
+          doc.setLineWidth(1);
+          doc.line(20, 42, 190, 42);
+          
+          if (logoBase64) {
+            try {
+              doc.addImage(logoBase64, 'PNG', 20, 8, 35, 28); 
+              doc.setTextColor(5, 6, 8);
+              doc.setFontSize(24);
+              doc.setFont('helvetica', 'bold');
+              doc.text('BASH // BUILD BRIEF', 65, 25);
+            } catch (e) {
+              console.error('PDF Logo error:', e);
+              logoBase64 = null;
+            }
+          } 
+          
+          if (!logoBase64) {
+            doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
+            doc.setFontSize(28);
+            doc.setFont('helvetica', 'bold');
+            doc.text('BASH // BUILD BRIEF', 20, 25);
+          }
+          
+          doc.setFontSize(10);
+          doc.setFont('courier', 'normal');
+          doc.setTextColor(100, 100, 100);
+          doc.text('TRANSFORMING IDEAS INTO REALITY', logoBase64 ? 65 : 20, 32);
+
+
+          // Content
+          doc.setTextColor(40, 40, 40);
+          let y = 65;
+
+          const addSection = (title, value) => {
+            if (y > 250) { doc.addPage(); y = 20; }
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
+            doc.text(title.toUpperCase(), 20, y);
+            y += 7;
+            
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            const splitValue = doc.splitTextToSize(value || 'N/A', 170);
+            doc.text(splitValue, 20, y);
+            y += (splitValue.length * 7) + 10;
+          };
+
+          addSection('Project Name', details.name);
+          addSection('Work Type', details.type);
+          addSection('Overview & Goals', details.description);
+          addSection('Timeline', details.timeline);
+          addSection('Tech Stack', details.stack);
+          addSection('Contact Email', details.email);
+          addSection('Mobile Number', details.phone);
+          if (details.url) addSection('Reference URL', details.url);
+
+          // Footer
+          doc.setDrawColor(accentColor[0], accentColor[1], accentColor[2]);
+          doc.setLineWidth(0.5);
+          doc.line(20, 275, 190, 275);
+          
+          doc.setFontSize(9);
+          doc.setTextColor(150, 150, 150);
+          doc.text('© 2026 Bash Tech Solutions. Automated Build Initiation Brief.', 20, 282);
+
+          try {
+            doc.save(`Bash_Project_${details.name.replace(/\s+/g, '_')}.pdf`);
+          } catch (e) {
+            console.error('PDF save failed:', e);
+          }
+          
+          return doc;
+        }
+
+        projectRegForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const name = document.getElementById('projName').value.trim();
+          const description = document.getElementById('projDesc').value.trim();
+          const email = document.getElementById('projEmail').value.trim();
+          const phone = document.getElementById('projPhone').value.trim();
+          const type = document.getElementById('projType').value;
+
+          if (!name || !description || !email || !phone) {
+            projectMessage.textContent = 'Please fill in all required fields.';
+            projectMessage.className = 'auth-message error';
+            return;
+          }
+
+          const payload = {
+            name,
+            type,
+            description,
+            url: document.getElementById('projUrl').value.trim(),
+            timeline: document.getElementById('projTimeline').value.trim(),
+            email,
+            phone,
+            stack: document.getElementById('projStack').value.trim()
+          };
+
+          const submitBtn = projectRegForm.querySelector('button');
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'INITIATING...';
+          projectMessage.textContent = 'Establishing secure connection...';
+          projectMessage.className = 'auth-message';
+
+          try {
+            const idToken = await auth.currentUser.getIdToken();
+            
+            const res = await fetch('/api/projects', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${idToken}`
+              },
+              body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+              projectMessage.textContent = 'Build initiated! Generating brief...';
+              projectMessage.className = 'auth-message success';
+              
+              try {
+                const doc = await generateProjectPDF(payload);
+                currentDoc = doc; 
+                const pdfData = doc.output('datauristring');
+                
+                projectRegForm.reset();
+                workTypeLabel.textContent = 'Select Category';
+                workTypeLabel.style.color = '#888';
+                projTypeInput.value = '';
+                workTypeOptions.forEach(opt => opt.classList.remove('selected'));
+
+                setTimeout(() => {
+                  closeProjectModal();
+                  openPreviewModal(pdfData);
+                }, 1500);
+              } catch (pdfErr) {
+                console.error(pdfErr);
+                projectMessage.textContent = 'Project saved, but PDF generation failed.';
+                projectMessage.className = 'auth-message error';
+              }
+            } else {
+              const data = await res.json();
+              projectMessage.textContent = 'Error: ' + (data.error || 'Failed to submit brief');
+              projectMessage.className = 'auth-message error';
+            }
+          } catch (err) {
+            projectMessage.textContent = 'Connection error. Please try again.';
+            projectMessage.className = 'auth-message error';
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'INITIATE BUILD';
+          }
+        });
+
+        previewClose.addEventListener('click', closePreviewModal);
+        closePreview.addEventListener('click', closePreviewModal);
+        downloadBrief.addEventListener('click', () => {
+          if (currentDoc) {
+            const name = document.getElementById('projName').value || 'Project';
+            currentDoc.save(`Bash_Project_${name.replace(/\s+/g, '_')}.pdf`);
+          }
+        });
+        previewModal.addEventListener('click', (e) => { if (e.target === previewModal) closePreviewModal(); });
+
+        authSwitchBtn.addEventListener('click', () => {
+          isSignUp = !isSignUp;
+          if (isSignUp) {
+            authTitle.textContent = 'Create Account';
+            authSubtitle.textContent = 'Sign up to get started';
+            authSubmit.textContent = 'Sign Up';
+            authSwitchText.textContent = 'Already have an account?';
+            authSwitchBtn.textContent = 'Sign In';
+            nameField.style.display = 'block';
+          } else {
+            authTitle.textContent = 'Welcome Back';
+            authSubtitle.textContent = 'Sign in to your account';
+            authSubmit.textContent = 'Sign In';
+            authSwitchText.textContent = "Don't have an account?";
+            authSwitchBtn.textContent = 'Sign Up';
+            nameField.style.display = 'none';
+          }
+          authMessage.textContent = '';
+          authMessage.className = 'auth-message';
+        });
+
+        authForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('authEmail').value;
+          const password = document.getElementById('authPassword').value;
+
+          authSubmit.textContent = isSignUp ? 'Creating...' : 'Signing in...';
+          authSubmit.disabled = true;
+
+          try {
+            if (isSignUp) {
+              await createUserWithEmailAndPassword(auth, email, password);
+              authMessage.textContent = 'Account created! Loading...';
+              authMessage.className = 'auth-message success';
+              setTimeout(() => {
+                closeAuthModal();
+                openProjectModal();
+              }, 1500);
+            } else {
+              await signInWithEmailAndPassword(auth, email, password);
+              closeAuthModal();
+              openProjectModal();
+            }
+          } catch (error) {
+            authMessage.textContent = error.message.replace('Firebase:', '').trim();
+            authMessage.className = 'auth-message error';
+          }
+
+          authSubmit.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+          authSubmit.disabled = false;
+        });
+
+        googleBtn.addEventListener('click', async () => {
+          try {
+            await signInWithPopup(auth, googleProvider);
+            closeAuthModal();
+            openProjectModal();
+          } catch (error) {
+            authMessage.textContent = error.message.replace('Firebase:', '').trim();
+            authMessage.className = 'auth-message error';
+          }
+        });
+
+        signOutBtn.addEventListener('click', async () => {
+          await signOut(auth);
+        });
+
+        onAuthStateChanged(auth, (user) => {
+          updateAuthUI(user);
+        });
+      });
+    </script>
+    <script src="./app.js?v=2.0"></script>
+    <script type="module" src="./robotics-3d.js"></script>
+    <script type="module" src="./printing-3d.js"></script>
+  </body>
+</html>

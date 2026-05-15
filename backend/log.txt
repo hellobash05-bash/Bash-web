@@ -1,0 +1,2 @@
+Admin backend running on http://localhost:5000
+[EMAIL SIMULATION] To: hellobash05@gmail.com | Code: 301517 | Time: 5/13/2026, 11:59:22 PM

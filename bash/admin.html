@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bash Admin | Project Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-0: #050608;
+            --bg-1: #0d0d0d;
+            --accent: #6cf2cf;
+            --accent-glow: rgba(108, 242, 207, 0.3);
+            --text: #dce4ee;
+            --error: #ff5f57;
+        }
+
+        /* ── RESET & CURSOR FIX ── */
+        * {
+            box-sizing: border-box;
+            cursor: auto !important; /* Force native cursor on admin page */
+        }
+
+        body {
+            background: var(--bg-0);
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── LOGIN OVERLAY ── */
+        #loginOverlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-0);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        /* ── CONTAINERS ── */
+        .glass-panel {
+            max-width: 450px;
+            width: 100%;
+            background: rgba(13, 13, 13, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ── FORM ELEMENTS ── */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.2rem;
+            border-radius: 0.8rem;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(108, 242, 207, 0.05);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        button {
+            width: 100%;
+            background: var(--accent);
+            color: var(--bg-0);
+            border: none;
+            padding: 1.1rem;
+            border-radius: 0.8rem;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--accent-glow);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        /* ── PROJECT MANAGER DASHBOARD ── */
+        .dashboard {
+            max-width: 900px;
+            width: 100%;
+            display: none; /* Initially hidden */
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .manager-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+
+        .add-project-card {
+            background: var(--bg-1);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .project-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .project-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .proj-meta h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .proj-meta small {
+            color: #666;
+            word-break: break-all;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 0.6rem;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            width: fit-content;
+        }
+
+        .delete-btn:hover {
+            background: var(--error);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(255, 95, 87, 0.3);
+        }
+
+        .logout-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .logout-link:hover { color: var(--error); }
+
+    </style>
+</head>
+<body>
+
+    <!-- ── LOGIN SECTION ── -->
+    <div id="loginOverlay">
+        <div class="glass-panel">
+            <h1>BASH ACCESS</h1>
+            <div class="form-group">
+                <label>Terminal ID</label>
+                <input type="text" id="adminUser" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label>Access Key</label>
+                <input type="password" id="adminPassword" placeholder="Password">
+            </div>
+            <button onclick="login()">Initialize Session</button>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="#" onclick="showForgot()" style="color: var(--accent); font-size: 0.85rem; text-decoration: none; opacity: 0.7; transition: opacity 0.3s;">Forgot Password?</a>
+            </div>
+            <p id="loginError" style="color: var(--error); font-size: 0.8rem; text-align: center; margin-top: 1rem; display: none;">Invalid Credentials</p>
+        </div>
+    </div>
+
+    <!-- ── VERIFICATION OVERLAY ── -->
+    <div id="verifyOverlay" style="display: none; position: fixed; inset: 0; background: var(--bg-0); z-index: 1001; align-items: center; justify-content: center; backdrop-filter: blur(20px);">
+        <div class="glass-panel">
+            <h1>VERIFY ACCESS</h1>
+            <p style="text-align: center; font-size: 0.9rem; color: #666; margin-bottom: 2rem;">A code has been sent to the company terminal. Enter it below.</p>
+            <div class="form-group">
+                <label>Verification Code</label>
+                <input type="text" id="verifyCode" placeholder="######" style="text-align: center; letter-spacing: 0.5em; font-weight: 700;">
+            </div>
+            <button onclick="verifyCode()">Confirm Identity</button>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="#" onclick="hideForgot()" style="color: #666; font-size: 0.85rem; text-decoration: none;">Back to Login</a>
+            </div>
+            <p id="verifyError" style="color: var(--error); font-size: 0.8rem; text-align: center; margin-top: 1rem; display: none;">Invalid or Expired Code</p>
+        </div>
+    </div>
+
+    <!-- ── DASHBOARD SECTION ── -->
+    <div class="dashboard" id="dashboard">
+        <header class="manager-header">
+            <h2 style="margin: 0; font-size: 1.5rem; letter-spacing: 0.1em;">PROJECT_MANAGER_V1.0</h2>
+            <a href="#" onclick="logout()" class="logout-link">TERMINATE SESSION [ESC]</a>
+        </header>
+
+        <section class="add-project-card">
+            <h3 style="margin-top: 0; margin-bottom: 2rem;">REGISTER NEW WORK</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end;">
+                <div class="form-group" style="margin: 0;">
+                    <label>Internal Name</label>
+                    <input type="text" id="projName" placeholder="Project Alpha">
+                </div>
+                <div class="form-group" style="margin: 0;">
+                    <label>Target URL</label>
+                    <input type="url" id="projUrl" placeholder="https://">
+                </div>
+                <button onclick="addProject()" style="margin: 0; width: 140px; padding: 1rem;">DEPLOY</button>
+            </div>
+        </section>
+
+        <h3 style="margin-bottom: 1.5rem; letter-spacing: 0.1em; color: #666;">ACTIVE_DEPLOYMENTS</h3>
+        <div class="project-list" id="projectList">
+            <!-- Dynamic projects -->
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/projects';
+        const AUTH_URL = '/api/auth/verify';
+        const FORGOT_URL = '/api/auth/forgot-password';
+        const VERIFY_CODE_URL = '/api/auth/verify-code';
+        let auth = { user: '', pass: '' };
+
+        // Check for existing session on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = sessionStorage.getItem('adminUser');
+            const savedPass = sessionStorage.getItem('adminPass');
+            if (savedUser && savedPass) {
+                document.getElementById('adminUser').value = savedUser;
+                document.getElementById('adminPassword').value = savedPass;
+                login(true);
+            }
+        });
+
+        async function login(isAuto = false) {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPassword').value;
+            
+            if (!user || !pass) return;
+
+            const loginButton = document.querySelector('button[onclick="login()"]');
+            if (loginButton) loginButton.innerText = 'AUTHENTICATING...';
+
+            try {
+                const res = await fetch(AUTH_URL, {
+                    method: 'POST',
+                    headers: { 
+                        'x-admin-user': user,
+                        'x-admin-password': pass 
+                    }
+                });
+
+                if (res.ok) {
+                    auth.user = user;
+                    auth.pass = pass;
+                    // Persist session
+                    sessionStorage.setItem('adminUser', user);
+                    sessionStorage.setItem('adminPass', pass);
+                    
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    loadProjects();
+                } else {
+                    if (!isAuto) {
+                        document.getElementById('loginError').style.display = 'block';
+                        sessionStorage.clear();
+                    }
+                }
+            } catch (e) {
+                if (!isAuto) alert('Connection to terminal lost.');
+            } finally {
+                if (loginButton) loginButton.innerText = 'Initialize Session';
+            }
+        }
+
+        async function showForgot() {
+            try {
+                const res = await fetch(FORGOT_URL, { method: 'POST' });
+                if (res.ok) {
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    document.getElementById('verifyOverlay').style.display = 'flex';
+                }
+            } catch (e) {
+                alert('Failed to initiate reset.');
+            }
+        }
+
+        function hideForgot() {
+            document.getElementById('verifyOverlay').style.display = 'none';
+            document.getElementById('loginOverlay').style.display = 'flex';
+        }
+
+        async function verifyCode() {
+            const code = document.getElementById('verifyCode').value;
+            if (!code) return;
+
+            try {
+                const res = await fetch(VERIFY_CODE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    auth.user = data.user;
+                    auth.pass = data.pass;
+                    // Persist session
+                    sessionStorage.setItem('adminUser', auth.user);
+                    sessionStorage.setItem('adminPass', auth.pass);
+                    
+                    document.getElementById('verifyOverlay').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    loadProjects();
+                } else {
+                    document.getElementById('verifyError').style.display = 'block';
+                }
+            } catch (e) {
+                alert('Verification failed.');
+            }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            location.reload();
+        }
+
+        async function loadProjects() {
+            try {
+                const res = await fetch(API_URL, {
+                    headers: {
+                        'x-admin-user': auth.user,
+                        'x-admin-password': auth.pass
+                    }
+                });
+                if (res.status === 401) return logout();
+                const projects = await res.json();
+                renderList(projects);
+            } catch (err) {
+                console.error('Failed to load projects');
+            }
+        }
+
+        function renderList(projects) {
+            const list = document.getElementById('projectList');
+            list.innerHTML = '';
+            projects.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'project-item';
+                div.innerHTML = `
+                    <div class="proj-meta">
+                        <h3>${p.name}</h3>
+                        <small>${p.url}</small>
+                    </div>
+                    <button class="delete-btn" onclick="deleteProject('${p.id}')">REMOVE</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        async function addProject() {
+            const name = document.getElementById('projName').value;
+            const url = document.getElementById('projUrl').value;
+            if (!name || !url) return;
+
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-admin-user': auth.user,
+                    'x-admin-password': auth.pass 
+                },
+                body: JSON.stringify({ name, url })
+            });
+
+            if (res.ok) {
+                document.getElementById('projName').value = '';
+                document.getElementById('projUrl').value = '';
+                loadProjects();
+            } else if (res.status === 401) {
+                logout();
+            }
+        }
+
+        async function deleteProject(id) {
+            if (!confirm('Execute deletion protocol?')) return;
+            const res = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE',
+                headers: { 
+                    'x-admin-user': auth.user,
+                    'x-admin-password': auth.pass 
+                }
+            });
+            if (res.ok) {
+                loadProjects();
+            } else if (res.status === 401) {
+                logout();
+            }
+        }
+    </script>
+</body>
+</html>
