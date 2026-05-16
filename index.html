@@ -490,8 +490,7 @@
 
         function openAuthModal() {
           authModal.classList.add('active');
-          authMessage.textContent = '';
-          authMessage.className = 'auth-message';
+          showMessage('');
         }
 
         function closeAuthModal() {
@@ -519,28 +518,48 @@
         }
 
         function updateAuthUI(user) {
+          const trackSection = document.getElementById('track');
+          const navTrack = document.getElementById('navTrack');
+
           if (user) {
             authToggleBtn.textContent = 'Account';
             authToggleBtn.style.background = 'var(--accent)';
+            authToggleBtn.style.color = '#000';
+            
             userEmail.textContent = user.email || user.displayName || 'User';
             authUser.style.display = 'flex';
             authForm.style.display = 'none';
             authDivider.style.display = 'none';
             socialButtons.style.display = 'none';
             authSwitch.style.display = 'none';
+            
+            if (trackSection) trackSection.style.display = 'block';
+            if (navTrack) navTrack.style.display = 'inline-flex';
           } else {
             authToggleBtn.textContent = 'Sign In';
             authToggleBtn.style.background = '#ffffff';
+            authToggleBtn.style.color = '#000';
+            
             authUser.style.display = 'none';
             authForm.style.display = 'block';
             authDivider.style.display = 'flex';
             socialButtons.style.display = 'flex';
             authSwitch.style.display = 'flex';
+            
+            if (trackSection) trackSection.style.display = 'none';
+            if (navTrack) navTrack.style.display = 'none';
           }
           if (registerWorkBtn) registerWorkBtn.textContent = 'Build';
         }
 
-        authToggleBtn.addEventListener('click', () => openAuthModal());
+        authToggleBtn.addEventListener('click', () => {
+          if (auth.currentUser) {
+            openAuthModal(); // Show account info / sign out
+          } else {
+            openAuthModal(); // Show sign in form
+          }
+        });
+
         if (registerWorkBtn) {
           registerWorkBtn.addEventListener('click', () => {
             if (auth.currentUser) {
@@ -908,27 +927,11 @@
 
         signOutBtn.addEventListener('click', async () => {
           await signOut(auth);
+          closeAuthModal();
         });
 
         onAuthStateChanged(auth, (user) => {
-          const authToggleBtn = document.getElementById('authToggleBtn');
-          const trackSection = document.getElementById('track');
-          const navTrack = document.getElementById('navTrack');
-
-          if (user) {
-            authToggleBtn.textContent = 'Sign Out';
-            authToggleBtn.onclick = () => signOut(auth);
-            if (trackSection) trackSection.style.display = 'block';
-            if (navTrack) navTrack.style.display = 'inline-flex';
-          } else {
-            authToggleBtn.textContent = 'Sign In';
-            authToggleBtn.onclick = () => {
-              const modal = document.getElementById('authModal');
-              if (modal) modal.classList.add('active');
-            };
-            if (trackSection) trackSection.style.display = 'none';
-            if (navTrack) navTrack.style.display = 'none';
-          }
+          updateAuthUI(user);
         });
 
         // Tracking Logic
