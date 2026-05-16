@@ -416,7 +416,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
       
       const firebaseConfig = {
         apiKey: "AIzaSyDYb8rVWtHxvSUPmKjW4gTSO-RBobTJjqU",
@@ -452,6 +452,16 @@
         const socialButtons = document.querySelector('.social-buttons');
         const authSwitch = document.querySelector('.auth-switch');
         const registerWorkBtn = document.getElementById('registerWorkBtn');
+
+        const forgotPasswordBtn = document.createElement('button');
+        forgotPasswordBtn.id = 'forgotPasswordBtn';
+        forgotPasswordBtn.type = 'button';
+        forgotPasswordBtn.className = 'auth-switch-btn';
+        forgotPasswordBtn.style.marginTop = '1rem';
+        forgotPasswordBtn.style.fontSize = '0.75rem';
+        forgotPasswordBtn.style.opacity = '0.6';
+        forgotPasswordBtn.textContent = 'Forgot password?';
+        authForm.appendChild(forgotPasswordBtn);
 
         const projectModal = document.getElementById('projectModal');
         const projectClose = document.getElementById('projectClose');
@@ -796,45 +806,83 @@
           authMessage.className = 'auth-message';
         });
 
+        function showMessage(msg, isError = true) {
+          authMessage.textContent = msg;
+          authMessage.className = `auth-message ${isError ? 'error' : 'success'}`;
+        }
+
         authForm.addEventListener('submit', async (e) => {
           e.preventDefault();
-          const email = document.getElementById('authEmail').value;
+          const email = document.getElementById('authEmail').value.trim();
           const password = document.getElementById('authPassword').value;
 
-          authSubmit.textContent = isSignUp ? 'Creating...' : 'Signing in...';
+          if (!email || !password) {
+            showMessage('Please enter both email and password.');
+            return;
+          }
+
+          authSubmit.textContent = isSignUp ? 'CREATING...' : 'SIGNING IN...';
           authSubmit.disabled = true;
+          authMessage.textContent = '';
 
           try {
             if (isSignUp) {
               await createUserWithEmailAndPassword(auth, email, password);
-              authMessage.textContent = 'Account created! Loading...';
-              authMessage.className = 'auth-message success';
+              showMessage('Success! Terminal access granted.', false);
               setTimeout(() => {
                 closeAuthModal();
                 openProjectModal();
-              }, 1500);
+              }, 1000);
             } else {
               await signInWithEmailAndPassword(auth, email, password);
-              closeAuthModal();
-              openProjectModal();
+              showMessage('Access verified.', false);
+              setTimeout(() => {
+                closeAuthModal();
+                openProjectModal();
+              }, 800);
             }
           } catch (error) {
-            authMessage.textContent = error.message.replace('Firebase:', '').trim();
-            authMessage.className = 'auth-message error';
+            let friendlyMsg = error.message.replace('Firebase:', '').replace('auth/', '').replace(/-/g, ' ').trim();
+            if (error.code === 'auth/invalid-credential') friendlyMsg = 'Invalid email or password.';
+            if (error.code === 'auth/email-already-in-use') friendlyMsg = 'This email is already registered.';
+            if (error.code === 'auth/weak-password') friendlyMsg = 'Password should be at least 6 characters.';
+            showMessage(friendlyMsg);
+          } finally {
+            authSubmit.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+            authSubmit.disabled = false;
           }
+        });
 
-          authSubmit.textContent = isSignUp ? 'Sign Up' : 'Sign In';
-          authSubmit.disabled = false;
+        forgotPasswordBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('authEmail').value.trim();
+          if (!email) {
+            showMessage('Please enter your email address first.');
+            return;
+          }
+          
+          try {
+            await sendPasswordResetEmail(auth, email);
+            showMessage('Password reset link sent to your email.', false);
+          } catch (error) {
+            showMessage('Failed to send reset email. Verify address.');
+          }
         });
 
         googleBtn.addEventListener('click', async () => {
+          googleBtn.disabled = true;
+          const originalContent = googleBtn.innerHTML;
+          googleBtn.textContent = 'CONNECTING...';
+
           try {
             await signInWithPopup(auth, googleProvider);
             closeAuthModal();
             openProjectModal();
           } catch (error) {
-            authMessage.textContent = error.message.replace('Firebase:', '').trim();
-            authMessage.className = 'auth-message error';
+            showMessage(error.message.replace('Firebase:', '').trim());
+          } finally {
+            googleBtn.disabled = false;
+            googleBtn.innerHTML = originalContent;
           }
         });
 
