@@ -45,7 +45,7 @@
             inset: 0;
             background: var(--bg-0);
             z-index: 1000;
-            display: flex;
+            display: none; /* Skip login */
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(20px);
@@ -137,7 +137,7 @@
         .dashboard {
             max-width: 900px;
             width: 100%;
-            display: none; /* Initially hidden */
+            display: block; /* Show by default */
             animation: fadeIn 0.8s ease-out;
         }
 
@@ -159,7 +159,7 @@
 
         .project-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: 1fr;
             gap: 1.5rem;
             width: 100%;
         }
@@ -167,11 +167,11 @@
         .project-item {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.05);
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 1.2rem;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            gap: 1.5rem;
             transition: all 0.3s ease;
         }
 
@@ -180,24 +180,83 @@
             background: rgba(255,255,255,0.04);
         }
 
-        .proj-meta h3 {
-            margin: 0 0 0.5rem;
-            font-size: 1.2rem;
+        .proj-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
-        .proj-meta small {
+        .proj-meta h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .proj-meta .badge {
+            background: rgba(108, 242, 207, 0.1);
+            color: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.4rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .proj-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .detail-group label {
             color: #666;
-            word-break: break-all;
+            margin-bottom: 0.2rem;
+        }
+
+        .detail-group p {
+            margin: 0;
+            color: #fff;
+        }
+
+        .proj-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 1.5rem;
+        }
+
+        .approve-btn {
+            background: var(--accent);
+            color: var(--bg-0);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: fit-content;
+            margin: 0;
+        }
+
+        .approve-btn:disabled {
+            background: rgba(255,255,255,0.1);
+            color: #666;
+            cursor: not-allowed;
         }
 
         .delete-btn {
             background: transparent;
             border: 1px solid var(--error);
             color: var(--error);
-            padding: 0.6rem;
-            margin-top: 1.5rem;
-            font-size: 0.8rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
             width: fit-content;
+            margin: 0;
         }
 
         .delete-btn:hover {
@@ -214,6 +273,62 @@
         }
 
         .logout-link:hover { color: var(--error); }
+
+        /* ── PROGRESS BAR ── */
+        .progress-container {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.05);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent) 0%, #a2ffeb 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .progress-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.8rem;
+        }
+
+        .progress-slider {
+            flex-grow: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .progress-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 45px;
+        }
 
     </style>
 </head>
@@ -259,28 +374,42 @@
     <!-- ── DASHBOARD SECTION ── -->
     <div class="dashboard" id="dashboard">
         <header class="manager-header">
-            <h2 style="margin: 0; font-size: 1.5rem; letter-spacing: 0.1em;">PROJECT_MANAGER_V1.0</h2>
-            <a href="#" onclick="logout()" class="logout-link">TERMINATE SESSION [ESC]</a>
+            <h2 style="margin: 0; font-size: 1.5rem; letter-spacing: 0.1em;">BASH_CONTROL_CENTER_V2.0</h2>
+            <a href="/" class="logout-link">RETURN TO HOME</a>
         </header>
 
+        <!-- ── SECTION 1: MANUAL PORTFOLIO MANAGEMENT ── -->
         <section class="add-project-card">
-            <h3 style="margin-top: 0; margin-bottom: 2rem;">REGISTER NEW WORK</h3>
+            <h3 style="margin-top: 0; margin-bottom: 2rem; color: var(--accent);">[01] ADD PORTFOLIO WEBSITE</h3>
+            <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Manually add websites to your public portfolio. These will be automatically committed.</p>
             <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end;">
                 <div class="form-group" style="margin: 0;">
-                    <label>Internal Name</label>
-                    <input type="text" id="projName" placeholder="Project Alpha">
+                    <label>Website Name</label>
+                    <input type="text" id="projName" placeholder="e.g. My Awesome Project">
                 </div>
                 <div class="form-group" style="margin: 0;">
-                    <label>Target URL</label>
+                    <label>Live URL</label>
                     <input type="url" id="projUrl" placeholder="https://">
                 </div>
-                <button onclick="addProject()" style="margin: 0; width: 140px; padding: 1rem;">DEPLOY</button>
+                <button onclick="addProject()" style="margin: 0; width: 140px; padding: 1rem;">PUBLISH</button>
             </div>
         </section>
 
-        <h3 style="margin-bottom: 1.5rem; letter-spacing: 0.1em; color: #666;">ACTIVE_DEPLOYMENTS</h3>
-        <div class="project-list" id="projectList">
-            <!-- Dynamic projects -->
+        <!-- ── SECTION 2: INCOMING SUBMISSIONS ── -->
+        <div style="margin-bottom: 4rem;">
+            <h3 style="margin-bottom: 1.5rem; letter-spacing: 0.1em; color: var(--accent);">[02] INCOMING_BUILD_REQUESTS</h3>
+            <div id="pendingList" class="project-list">
+                <!-- Pending submissions will appear here -->
+                <p style="color: #444; text-align: center; padding: 2rem;">No pending requests detected.</p>
+            </div>
+        </div>
+
+        <!-- ── SECTION 3: ACTIVE PORTFOLIO ── -->
+        <div>
+            <h3 style="margin-bottom: 1.5rem; letter-spacing: 0.1em; color: #666;">[03] ACTIVE_PORTFOLIO_INVENTORY</h3>
+            <div id="activeList" class="project-list">
+                <!-- Approved portfolio items will appear here -->
+            </div>
         </div>
     </div>
 
@@ -289,17 +418,11 @@
         const AUTH_URL = '/api/auth/verify';
         const FORGOT_URL = '/api/auth/forgot-password';
         const VERIFY_CODE_URL = '/api/auth/verify-code';
-        let auth = { user: '', pass: '' };
+        let auth = { user: 'admin', pass: 'password' };
 
-        // Check for existing session on load
+        // Auto-load projects on startup
         window.addEventListener('DOMContentLoaded', () => {
-            const savedUser = sessionStorage.getItem('adminUser');
-            const savedPass = sessionStorage.getItem('adminPass');
-            if (savedUser && savedPass) {
-                document.getElementById('adminUser').value = savedUser;
-                document.getElementById('adminPassword').value = savedPass;
-                login(true);
-            }
+            loadProjects();
         });
 
         async function login(isAuto = false) {
@@ -412,20 +535,164 @@
         }
 
         function renderList(projects) {
-            const list = document.getElementById('projectList');
-            list.innerHTML = '';
-            projects.forEach(p => {
+            const pendingList = document.getElementById('pendingList');
+            const activeList = document.getElementById('activeList');
+            
+            pendingList.innerHTML = '';
+            activeList.innerHTML = '';
+
+            const pendingRequests = projects.filter(p => !p.isPortfolio && p.status === 'pending');
+            const acceptedRequests = projects.filter(p => !p.isPortfolio && p.status === 'accepted');
+            const portfolioItems = projects.filter(p => p.isPortfolio);
+
+            if (pendingRequests.length === 0 && acceptedRequests.length === 0) {
+                pendingList.innerHTML = '<p style="color: #444; text-align: center; padding: 2rem; border: 1px dashed rgba(255,255,255,0.05); border-radius: 1rem;">No client work requests.</p>';
+            }
+
+            // Render Pending Requests
+            pendingRequests.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'project-item';
+                div.style.borderColor = 'var(--accent)';
+                div.innerHTML = `
+                    <div class="proj-header">
+                        <div class="proj-meta">
+                            <h3>${p.name}</h3>
+                            <span class="badge" style="background: var(--accent); color: var(--bg-0);">NEW REQUEST</span>
+                        </div>
+                        <div style="text-align: right">
+                            <small style="color: #666">${new Date(p.timestamp).toLocaleString()}</small>
+                        </div>
+                    </div>
+                    
+                    <div class="proj-details">
+                        <div class="detail-group">
+                            <label>Client Vision</label>
+                            <p>${p.description || 'No description provided'}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Contact Details</label>
+                            <p>${p.email}<br>${p.phone}</p>
+                        </div>
+                    </div>
+
+                    <div class="proj-actions">
+                        <button class="approve-btn" onclick="approveProject('${p.id}')">ACCEPT WORK & SEND MAIL</button>
+                        <button class="delete-btn" onclick="deleteProject('${p.id}')">DECLINE</button>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #555; margin-top: 0.5rem;">※ Acceptance will NOT add this to your public portfolio.</p>
+                `;
+                pendingList.appendChild(div);
+            });
+
+            // Render Accepted Requests (Already sent mail)
+            acceptedRequests.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'project-item';
+                div.style.borderLeft = '4px solid var(--accent)';
+                div.innerHTML = `
+                    <div class="proj-header">
+                        <div class="proj-meta">
+                            <h3>${p.name}</h3>
+                            <span class="badge" style="background: var(--accent); color: var(--bg-0);">ACTIVE BUILD IN PROGRESS</span>
+                        </div>
+                        <div style="text-align: right">
+                            <small style="color: #666">${new Date(p.timestamp).toLocaleString()}</small>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <label style="margin-bottom: 0.8rem; display: block;">WORK_PROGRESSION_STATUS</label>
+                        <div class="progress-bar-bg">
+                            <div class="progress-fill" style="width: ${p.progress || 0}%"></div>
+                        </div>
+                        <div class="progress-controls">
+                            <input type="range" class="progress-slider" value="${p.progress || 0}" min="0" max="100" 
+                                oninput="this.nextElementSibling.innerText = this.value + '%'"
+                                onchange="updateProgress('${p.id}', this.value)">
+                            <span class="progress-text">${p.progress || 0}%</span>
+                        </div>
+                    </div>
+
+                    <div class="proj-actions">
+                        <button class="delete-btn" onclick="deleteProject('${p.id}')">TERMINATE BUILD</button>
+                    </div>
+                `;
+                pendingList.appendChild(div);
+            });
+
+            portfolioItems.forEach(p => {
                 const div = document.createElement('div');
                 div.className = 'project-item';
                 div.innerHTML = `
-                    <div class="proj-meta">
-                        <h3>${p.name}</h3>
-                        <small>${p.url}</small>
+                    <div class="proj-header">
+                        <div class="proj-meta">
+                            <h3>${p.name}</h3>
+                            <span class="badge">ACTIVE PORTFOLIO</span>
+                        </div>
+                        <div style="text-align: right">
+                            <a href="${p.url}" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.8rem;">VIEW LIVE SITE ↗</a>
+                        </div>
                     </div>
-                    <button class="delete-btn" onclick="deleteProject('${p.id}')">REMOVE</button>
+                    
+                    <div class="proj-details">
+                        <div class="detail-group">
+                            <label>Project URL</label>
+                            <p style="word-break: break-all;">${p.url}</p>
+                        </div>
+                    </div>
+
+                    <div class="proj-actions">
+                        <button class="delete-btn" onclick="deleteProject('${p.id}')">REMOVE FROM PORTFOLIO</button>
+                    </div>
                 `;
-                list.appendChild(div);
+                activeList.appendChild(div);
             });
+        }
+
+        async function approveProject(id) {
+            if (!confirm('Accept this client project?\n\nA work approval letter will be sent to the client. This will NOT be added to your public portfolio.')) return;
+            
+            try {
+                const res = await fetch(`${API_URL}/${id}/approve`, {
+                    method: 'POST',
+                    headers: { 
+                        'x-admin-user': auth.user,
+                        'x-admin-password': auth.pass 
+                    }
+                });
+
+                if (res.ok) {
+                    loadProjects();
+                } else if (res.status === 401) {
+                    logout();
+                }
+            } catch (err) {
+                alert('Failed to accept project.');
+            }
+        }
+
+        async function updateProgress(id, progress) {
+            try {
+                const res = await fetch(`${API_URL}/${id}/progress`, {
+                    method: 'PATCH',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-admin-user': auth.user,
+                        'x-admin-password': auth.pass 
+                    },
+                    body: JSON.stringify({ progress: parseInt(progress) })
+                });
+
+                if (res.ok) {
+                    // Update the UI bar immediately for feedback
+                    loadProjects();
+                } else if (res.status === 401) {
+                    logout();
+                }
+            } catch (err) {
+                alert('Failed to update progress.');
+            }
         }
 
         async function addProject() {
@@ -440,7 +707,14 @@
                     'x-admin-user': auth.user,
                     'x-admin-password': auth.pass 
                 },
-                body: JSON.stringify({ name, url })
+                body: JSON.stringify({ 
+                    name, 
+                    url,
+                    isPortfolio: true, // Manual additions go to portfolio
+                    description: 'Portfolio item',
+                    email: 'admin@bash.tech',
+                    phone: 'Internal'
+                })
             });
 
             if (res.ok) {

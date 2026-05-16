@@ -1,72 +1,66 @@
 [
   {
-    "id": "1778687973026",
-    "name": "Bash Site Preview",
-    "url": "https://bash-site.com"
+    "id": "1778909976426",
+    "name": "Arun.A.S portfolio",
+    "description": "Manually added portfolio item",
+    "url": "https://arun-git-robo.github.io/Arun-s-web/",
+    "email": "admin@bash.tech",
+    "phone": "Internal",
+    "approved": true,
+    "timestamp": "2026-05-16T05:39:36.426Z"
   },
   {
-    "id": "1778690618955",
-    "name": "Arun.A.S",
-    "url": "https://arun-git-robo.github.io/Arun-s-web/"
+    "id": "1778910101335",
+    "name": "web_designing",
+    "type": "webdesigning",
+    "description": "make a test website",
+    "url": "",
+    "timeline": "1 month",
+    "email": "arunsuresh667@gmail.com",
+    "phone": "26519494",
+    "stack": "asdrdfgadf",
+    "approved": true,
+    "timestamp": "2026-05-16T05:41:41.335Z"
   },
   {
-    "id": "1778868855824",
+    "id": "1778912135626",
     "name": "project",
-    "type": "webapp",
-    "description": "make a website",
-    "url": "",
-    "timeline": "1 moth",
-    "email": "arunsuresh667@gmail.com",
-    "phone": "+917592965860",
-    "stack": "animations",
-    "timestamp": "2026-05-15T18:14:15.824Z"
-  },
-  {
-    "id": "1778869008902",
-    "name": "project02",
     "type": "mobileapp",
-    "description": "eqwtwt",
+    "description": "werwthwtw",
     "url": "",
-    "timeline": "1 moth",
+    "timeline": "1 month",
     "email": "arunsuresh667@gmail.com",
-    "phone": "+917592965860",
-    "stack": "asdfagsadf",
-    "timestamp": "2026-05-15T18:16:48.902Z"
+    "phone": "/528852/",
+    "stack": "wrgw457ib",
+    "approved": true,
+    "timestamp": "2026-05-16T06:15:35.626Z"
   },
   {
-    "id": "1778869032175",
-    "name": "project02",
-    "type": "mobileapp",
-    "description": "eqwtwt",
-    "url": "",
-    "timeline": "1 moth",
-    "email": "arunsuresh667@gmail.com",
-    "phone": "+917592965860",
-    "stack": "asdfagsadf",
-    "timestamp": "2026-05-15T18:17:12.175Z"
-  },
-  {
-    "id": "1778869180599",
-    "name": "project02",
+    "id": "1778925446462",
+    "name": "app",
     "type": "webapp",
-    "description": "eqwtwt",
+    "description": "app making",
     "url": "",
-    "timeline": "1 moth",
+    "timeline": "1 month",
     "email": "arunsuresh667@gmail.com",
-    "phone": "+917592965860",
-    "stack": "asdfagsadf",
-    "timestamp": "2026-05-15T18:19:40.599Z"
+    "phone": "44251781654",
+    "stack": "qwergwtywtywtrrh",
+    "approved": true,
+    "timestamp": "2026-05-16T09:57:26.462Z"
   },
   {
-    "id": "1778869383098",
-    "name": "project",
-    "type": "aiml",
-    "description": "zfdstj",
+    "id": "1778934388361",
+    "name": "project01",
+    "type": "webdesigning",
+    "description": "ateerhwhtrwh",
     "url": "",
-    "timeline": "1 moth",
+    "timeline": "1 month",
     "email": "arunsuresh667@gmail.com",
-    "phone": "21611652065",
-    "stack": "sdfhsgjsj",
-    "timestamp": "2026-05-15T18:23:03.098Z"
+    "phone": "231654985641",
+    "stack": "asgevrgawgbr",
+    "isPortfolio": false,
+    "status": "accepted",
+    "progress": 23,
+    "timestamp": "2026-05-16T12:26:28.361Z"
   }
 ]

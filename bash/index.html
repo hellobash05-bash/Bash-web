@@ -37,6 +37,7 @@
         <a href="#about">About</a>
         <a href="#webdev">Services</a>
         <a href="#projects">Projects</a>
+        <a href="#track">Track</a>
         <a href="#contact">Contact</a>
         <a href="./admin.html">Admin</a>
       </nav>
@@ -314,6 +315,20 @@
               From rapid prototyping to custom functional parts, we utilize advanced additive manufacturing 
               techniques to deliver durable and detailed physical solutions.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="track-section" id="track" aria-label="Track Your Build">
+        <div class="track-container" data-animate>
+          <h2 class="track-title">TRACK YOUR BUILD</h2>
+          <p style="color: #888; margin-bottom: 2rem;">Enter the email you used for your project brief to check its current build status.</p>
+          <div class="track-input-group">
+            <input type="email" id="trackEmail" class="track-input" placeholder="client@example.com" />
+            <button class="track-btn" id="trackBtn">CHECK STATUS</button>
+          </div>
+          <div id="trackResults" class="track-results">
+            <!-- Tracking results will appear here -->
           </div>
         </div>
       </section>
@@ -829,6 +844,63 @@
         onAuthStateChanged(auth, (user) => {
           updateAuthUI(user);
         });
+
+        // Tracking Logic
+        const trackBtn = document.getElementById('trackBtn');
+        const trackEmailInput = document.getElementById('trackEmail');
+        const trackResults = document.getElementById('trackResults');
+
+        if (trackBtn) {
+          trackBtn.addEventListener('click', async () => {
+            const email = trackEmailInput.value.trim();
+            if (!email) return;
+
+            trackBtn.disabled = true;
+            trackBtn.textContent = 'CONNECTING...';
+            trackResults.innerHTML = '';
+
+            try {
+              const res = await fetch(`/api/projects/track?email=${encodeURIComponent(email)}`);
+              const projects = await res.json();
+
+              if (projects.length === 0) {
+                trackResults.innerHTML = '<p style="text-align: center; color: #666;">No active build requests found for this email.</p>';
+              } else {
+                projects.forEach(p => {
+                  const status = (p.status || 'pending').toUpperCase();
+                  const item = document.createElement('div');
+                  item.className = 'track-item';
+                  item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                      <h4>${p.name}</h4>
+                      <span style="font-size: 0.7rem; color: #666;">INITIATED: ${new Date(p.timestamp).toLocaleDateString()}</span>
+                    </div>
+                    <div class="track-progress-container">
+                      <div class="track-progress-bar">
+                        <div class="track-progress-fill" style="width: 0%"></div>
+                      </div>
+                      <div class="track-status-text">
+                        <span>STATUS: ${status}</span>
+                        <span>${p.progress}% COMPLETE</span>
+                      </div>
+                    </div>
+                  `;
+                  trackResults.appendChild(item);
+                  
+                  // Trigger animation
+                  setTimeout(() => {
+                    item.querySelector('.track-progress-fill').style.width = p.progress + '%';
+                  }, 100);
+                });
+              }
+            } catch (err) {
+              trackResults.innerHTML = '<p style="text-align: center; color: var(--error);">Failed to sync with terminal. Check connection.</p>';
+            } finally {
+              trackBtn.disabled = false;
+              trackBtn.textContent = 'CHECK STATUS';
+            }
+          });
+        }
       });
     </script>
     <script src="./app.js?v=2.0"></script>
