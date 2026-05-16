@@ -489,22 +489,38 @@
         let currentDoc = null; 
 
         function openAuthModal() {
-          authModal.classList.add('active');
-          showMessage('');
+          const modal = document.getElementById('authModal');
+          if (modal) {
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+            showMessage('');
+          }
         }
 
         function closeAuthModal() {
-          authModal.classList.remove('active');
+          const modal = document.getElementById('authModal');
+          if (modal) {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+          }
         }
 
         function openProjectModal() {
-          projectModal.classList.add('active');
-          projectMessage.textContent = '';
-          projectMessage.className = 'auth-message';
+          const modal = document.getElementById('projectModal');
+          if (modal) {
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+            projectMessage.textContent = '';
+            projectMessage.className = 'auth-message';
+          }
         }
 
         function closeProjectModal() {
-          projectModal.classList.remove('active');
+          const modal = document.getElementById('projectModal');
+          if (modal) {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+          }
         }
 
         function openPreviewModal(docUrl) {
