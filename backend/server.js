@@ -40,8 +40,8 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 
-// Serve static files from the 'bash' directory
-app.use(express.static(path.join(__dirname, '../bash')));
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname, '..')));
 
 // Ensure projects.json exists
 async function initStorage() {
