@@ -37,9 +37,9 @@
         <a href="#about">About</a>
         <a href="#webdev">Services</a>
         <a href="#projects">Projects</a>
-        <a href="#track">Track</a>
+        <a href="#track" id="navTrack" style="display: none;">Track</a>
         <a href="#contact">Contact</a>
-        <a href="./admin.html">Admin</a>
+        <a href="./admin.html" class="auth-btn" style="background: rgba(255,255,255,0.05); color: var(--accent); border: 1px solid rgba(108, 242, 207, 0.3); text-decoration: none; display: inline-flex; align-items: center;">Admin</a>
       </nav>
       <button class="auth-btn" id="authToggleBtn">Sign In</button>
     </header>
@@ -319,7 +319,8 @@
         </div>
       </section>
 
-      <section class="track-section" id="track" aria-label="Track Your Build">
+      <!-- ── GATED CLIENT TRACKING ── -->
+      <section class="track-section" id="track" aria-label="Track Your Build" style="display: none;">
         <div class="track-container" data-animate>
           <h2 class="track-title">TRACK YOUR BUILD</h2>
           <p style="color: #888; margin-bottom: 2rem;">Enter the email you used for your project brief to check its current build status.</p>
@@ -842,7 +843,24 @@
         });
 
         onAuthStateChanged(auth, (user) => {
-          updateAuthUI(user);
+          const authToggleBtn = document.getElementById('authToggleBtn');
+          const trackSection = document.getElementById('track');
+          const navTrack = document.getElementById('navTrack');
+
+          if (user) {
+            authToggleBtn.textContent = 'Sign Out';
+            authToggleBtn.onclick = () => signOut(auth);
+            if (trackSection) trackSection.style.display = 'block';
+            if (navTrack) navTrack.style.display = 'inline-flex';
+          } else {
+            authToggleBtn.textContent = 'Sign In';
+            authToggleBtn.onclick = () => {
+              const modal = document.getElementById('authModal');
+              if (modal) modal.classList.add('active');
+            };
+            if (trackSection) trackSection.style.display = 'none';
+            if (navTrack) navTrack.style.display = 'none';
+          }
         });
 
         // Tracking Logic
@@ -889,7 +907,8 @@
                   
                   // Trigger animation
                   setTimeout(() => {
-                    item.querySelector('.track-progress-fill').style.width = p.progress + '%';
+                    const fill = item.querySelector('.track-progress-fill');
+                    if (fill) fill.style.width = p.progress + '%';
                   }, 100);
                 });
               }

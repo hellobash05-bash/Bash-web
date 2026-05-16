@@ -45,7 +45,7 @@
             inset: 0;
             background: var(--bg-0);
             z-index: 1000;
-            display: none; /* Skip login */
+            display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(20px);
@@ -137,7 +137,7 @@
         .dashboard {
             max-width: 900px;
             width: 100%;
-            display: block; /* Show by default */
+            display: none;
             animation: fadeIn 0.8s ease-out;
         }
 
@@ -375,7 +375,10 @@
     <div class="dashboard" id="dashboard">
         <header class="manager-header">
             <h2 style="margin: 0; font-size: 1.5rem; letter-spacing: 0.1em;">BASH_CONTROL_CENTER_V2.0</h2>
-            <a href="/" class="logout-link">RETURN TO HOME</a>
+            <div style="display: flex; gap: 1.5rem; align-items: center;">
+                <a href="/" class="logout-link">RETURN TO HOME</a>
+                <button onclick="logout()" class="logout-link" style="background: none; border: 1px solid #333; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer;">LOGOUT</button>
+            </div>
         </header>
 
         <!-- ── SECTION 1: MANUAL PORTFOLIO MANAGEMENT ── -->
@@ -418,11 +421,17 @@
         const AUTH_URL = '/api/auth/verify';
         const FORGOT_URL = '/api/auth/forgot-password';
         const VERIFY_CODE_URL = '/api/auth/verify-code';
-        let auth = { user: 'admin', pass: 'password' };
+        let auth = { user: '', pass: '' };
 
         // Auto-load projects on startup
         window.addEventListener('DOMContentLoaded', () => {
-            loadProjects();
+            const savedUser = sessionStorage.getItem('adminUser');
+            const savedPass = sessionStorage.getItem('adminPass');
+            if (savedUser && savedPass) {
+                document.getElementById('adminUser').value = savedUser;
+                document.getElementById('adminPassword').value = savedPass;
+                login(true);
+            }
         });
 
         async function login(isAuto = false) {
