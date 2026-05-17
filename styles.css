@@ -1353,7 +1353,7 @@ body {
   50% { transform: translate(20px, -30px) rotate(20deg); opacity: 0.4; }
 }
 
-/* Brand Glitch Effect */
+/* Brand Logo Style */
 .brand {
   color: #ffffff;
   text-decoration: none;
@@ -1361,37 +1361,7 @@ body {
   letter-spacing: 0.02em;
   white-space: nowrap;
   cursor: default;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.brand::after {
-  content: '</>Bash';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--bg-0);
-  color: var(--accent);
-  clip-path: inset(50% 0 30% 0);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-}
-
-.brand:hover::after {
-  transform: translateX(0);
-  animation: glitch 0.3s infinite;
-}
-
-@keyframes glitch {
-  0% { clip-path: inset(20% 0 40% 0); transform: translate(-2px, 2px); }
-  20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -2px); }
-  40% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, -2px); }
-  60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, 2px); }
-  80% { clip-path: inset(40% 0 30% 0); transform: translate(-2px, 2px); }
-  100% { clip-path: inset(20% 0 40% 0); transform: translate(0); }
+  font-size: 1.25rem;
 }
 
 /* Background Animated Grid */
@@ -1492,10 +1462,6 @@ body {
   display: none !important;
 }
 
-.brand:hover::after {
-  animation: none !important;
-  transform: translateX(-100%) !important;
-}
 
 
 /* ── Register Work & Login Modal ── */
