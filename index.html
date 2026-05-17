@@ -990,7 +990,7 @@
             }
           } catch (err) {
             console.error('Submission Error:', err);
-            projectMessage.textContent = 'Connection error. You may need a Secure Tunnel for GitHub Pages.';
+            projectMessage.textContent = `Connection error to ${API_BASE_URL || 'local server'}. You may need a Secure Tunnel.`;
             projectMessage.className = 'auth-message error';
           } finally {
             submitBtn.disabled = false;
