@@ -543,7 +543,7 @@
 
         try {
           console.log('Fetching status for:', email);
-          const res = await fetch(`/api/projects/track?email=${encodeURIComponent(email)}`);
+          const res = await fetch(`${API_BASE_URL}/api/projects/track?email=${encodeURIComponent(email)}`);
           const projects = await res.json();
           console.log('Projects found:', projects);
 
@@ -603,6 +603,11 @@
       const auth = getAuth(app);
       const googleProvider = new GoogleAuthProvider();
       googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+      // Detect if we are on GitHub Pages and point to local backend
+      const isGitHub = window.location.hostname.includes('github.io');
+      const API_BASE_URL = isGitHub ? 'http://localhost:5000' : '';
+      console.log('API Base URL:', API_BASE_URL || 'relative');
 
       // Expose to window for global access
       window.auth = auth;
@@ -930,7 +935,7 @@
               headers['Authorization'] = `Bearer ${idToken}`;
             }
             
-            const res = await fetch('/api/projects', {
+            const res = await fetch(`${API_BASE_URL}/api/projects`, {
               method: 'POST',
               headers: headers,
               body: JSON.stringify(payload)

@@ -35,7 +35,7 @@ transporter.verify(function (error, success) {
 const app = express();
 
 app.use(cors({
-  origin: true,
+  origin: ['http://localhost:5000', 'https://hellobash05-bash.github.io'],
   credentials: true
 }));
 app.use(bodyParser.json());
