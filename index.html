@@ -606,8 +606,26 @@
 
       // Detect if we are on GitHub Pages and point to local backend
       const isGitHub = window.location.hostname.includes('github.io');
-      const API_BASE_URL = isGitHub ? 'http://localhost:5000' : '';
+      let API_BASE_URL = isGitHub ? (localStorage.getItem('BASH_API_OVERRIDE') || 'http://localhost:5000') : '';
       console.log('API Base URL:', API_BASE_URL || 'relative');
+
+      // Secret feature: Click logo 5 times to set API URL (useful for localtunnel/ngrok)
+      let clickCount = 0;
+      document.querySelector('.brand').addEventListener('click', (e) => {
+        e.preventDefault();
+        clickCount++;
+        if (clickCount === 5) {
+          const newUrl = prompt('Enter Secure Backend URL (e.g. https://...):', API_BASE_URL);
+          if (newUrl !== null) {
+            API_BASE_URL = newUrl;
+            localStorage.setItem('BASH_API_OVERRIDE', newUrl);
+            alert('API URL updated. Refreshing page...');
+            location.reload();
+          }
+          clickCount = 0;
+        }
+        setTimeout(() => { clickCount = 0; }, 3000);
+      });
 
       // Expose to window for global access
       window.auth = auth;
@@ -971,7 +989,8 @@
               projectMessage.className = 'auth-message error';
             }
           } catch (err) {
-            projectMessage.textContent = 'Connection error. Please try again.';
+            console.error('Submission Error:', err);
+            projectMessage.textContent = 'Connection error. You may need a Secure Tunnel for GitHub Pages.';
             projectMessage.className = 'auth-message error';
           } finally {
             submitBtn.disabled = false;
