@@ -954,7 +954,13 @@ body {
   flex-wrap: wrap;
 }
 
-.footer-brand {
+.footer.brand {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: default;
   flex: 1 1 300px;
 }
 
@@ -1171,7 +1177,13 @@ body {
     gap: 3rem;
   }
   
-  .footer-brand {
+  .footer.brand {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: default;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1195,6 +1207,12 @@ body {
   }
   
   .brand {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: default;
     font-size: 1rem;
   }
 
@@ -1337,6 +1355,12 @@ body {
 
 /* Brand Glitch Effect */
 .brand {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: default;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
