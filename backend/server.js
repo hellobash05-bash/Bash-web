@@ -12,7 +12,7 @@ dotenv.config();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECTS_FILE = path.join(__dirname, 'projects.json');
 const ADMIN_USERNAME = 'admin';
-const ADMIN_PASSWORD = 'password';
+const ADMIN_PASSWORD = 'admin@bash05';
 
 // Nodemailer Transporter Setup (Configure with your email provider)
 const transporter = nodemailer.createTransport({
@@ -35,7 +35,7 @@ transporter.verify(function (error, success) {
 const app = express();
 
 app.use(cors({
-  origin: ['http://localhost:5000', 'https://hellobash05-bash.github.io'],
+  origin: true,
   credentials: true
 }));
 app.use(bodyParser.json());
