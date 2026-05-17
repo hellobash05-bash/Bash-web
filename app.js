@@ -250,7 +250,7 @@ async function loadMainProjects() {
   if (!grid) return;
 
   try {
-    const res = await fetch((window.location.hostname.includes('github.io') ? (localStorage.getItem('BASH_API_OVERRIDE') || 'https://bash-fix-999-v2-x123.loca.lt') : '') + '/api/projects/public', { headers: { 'bypass-tunnel-reminder': 'true' } });
+    const res = await fetch((window.location.hostname.includes('github.io') ? (localStorage.getItem('BASH_API_OVERRIDE') || 'https://bash-live-v3-999.loca.lt') : '') + '/api/projects/public', { headers: { 'bypass-tunnel-reminder': 'true' } });
     const projects = await res.json();
 
     if (projects.length === 0) {
