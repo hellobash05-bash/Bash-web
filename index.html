@@ -606,7 +606,7 @@
 
       // Detect if we are on GitHub Pages and point to local backend
       const isGitHub = window.location.hostname.includes('github.io');
-      let API_BASE_URL = isGitHub ? (localStorage.getItem('BASH_API_OVER_NEW') || 'https://strong-zoos-admire-bash.loca.lt') : '';
+      let API_BASE_URL = isGitHub ? (localStorage.getItem('BASH_API_OVER_NEW') || 'https://bash-preview-dev-05.loca.lt') : '';
       console.log('API Base URL:', API_BASE_URL || 'relative');
 
       // Secret feature: Click logo 5 times to set API URL (useful for localtunnel/ngrok)
