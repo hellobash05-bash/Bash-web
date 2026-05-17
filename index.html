@@ -31,7 +31,7 @@
   </head>
   <body>
     <header class="site-header" id="header">
-      <span class="brand"><a class="brand" href="#">&lt;/&gt;Bash</a>lt;/<a class="brand" href="#">&lt;/&gt;Bash</a>gt;Bash</span>
+      <span class="brand">&lt;/&gt;Bash</span>
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
         <span></span>
         <span></span>
@@ -328,7 +328,7 @@
       <section class="track-section" id="track" aria-label="Track Your Build">
         <div class="track-container" data-animate>
           <h2 class="track-title">TRACK YOUR BUILD</h2>
-          <p style="color: #888; margin-bottom: 2rem;">Enter the email you used for your project brief to check its current build status.</p>
+          <p class="track-subtitle">Enter your registered email to synchronize with the BASH terminal and retrieve your real-time project progression metrics.</p>
           <div class="track-input-group">
             <input type="email" id="trackEmail" class="track-input" placeholder="client@example.com" />
             <button class="track-btn" id="trackBtn" onclick="window.handleTrackClick()">CHECK STATUS</button>
@@ -558,19 +558,31 @@
             projects.forEach(p => {
               const status = (p.status || 'pending').toUpperCase();
               const item = document.createElement('div');
-              item.className = 'track-item';
+              item.className = 'track-card';
               item.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                  <h4>${p.name}</h4>
-                  <span style="font-size: 0.7rem; color: #666;">INITIATED: ${new Date(p.timestamp).toLocaleDateString()}</span>
+                <div class="track-card-header">
+                  <h3>${p.name}</h3>
+                  <span class="track-status-pill">${status}</span>
                 </div>
-                <div class="track-progress-container">
-                  <div class="track-progress-bar">
-                    <div class="track-progress-fill" style="width: 0%"></div>
+                <div class="track-progress-info">
+                  <span>WORK_PROGRESSION</span>
+                  <span>${p.progress}%</span>
+                </div>
+                <div class="track-progress-bar-bg">
+                  <div class="track-progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <div class="track-details-grid">
+                  <div class="track-detail-item">
+                    <label>Terminal ID</label>
+                    <span>#${p.id.slice(-6)}</span>
                   </div>
-                  <div class="track-status-text">
-                    <span>STATUS: ${status}</span>
-                    <span>${p.progress}% COMPLETE</span>
+                  <div class="track-detail-item">
+                    <label>Initiated</label>
+                    <span>${new Date(p.timestamp).toLocaleDateString()}</span>
+                  </div>
+                  <div class="track-detail-item">
+                    <label>Priority</label>
+                    <span>Standard</span>
                   </div>
                 </div>
               `;
@@ -578,7 +590,7 @@
               
               // Trigger animation
               setTimeout(() => {
-                const fill = item.querySelector('.track-progress-fill');
+                const fill = item.querySelector('.track-progress-bar-fill');
                 if (fill) fill.style.width = p.progress + '%';
               }, 100);
             });
