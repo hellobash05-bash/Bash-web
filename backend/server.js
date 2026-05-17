@@ -120,7 +120,7 @@ app.get('/api/projects/track', async (req, res) => {
   }
 });
 
-app.post('/api/projects', authenticate, async (req, res) => {
+app.post('/api/projects', async (req, res) => {
   try {
     const { name, type, description, url, timeline, email, phone, stack } = req.body;
 

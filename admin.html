@@ -330,6 +330,15 @@
             min-width: 45px;
         }
 
+        /* Autofill styling fix */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #ffffff;
+            -webkit-box-shadow: 0 0 0px 1000px #161b22 inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
     </style>
 </head>
 <body>
@@ -340,11 +349,11 @@
             <h1>BASH ACCESS</h1>
             <div class="form-group">
                 <label>Terminal ID</label>
-                <input type="text" id="adminUser" placeholder="Username">
+                <input type="text" id="adminUser" placeholder="Username" autocomplete="off" spellcheck="false">
             </div>
             <div class="form-group">
                 <label>Access Key</label>
-                <input type="password" id="adminPassword" placeholder="Password">
+                <input type="password" id="adminPassword" placeholder="Password" autocomplete="new-password">
             </div>
             <button onclick="login()">Initialize Session</button>
             <div style="text-align: center; margin-top: 1.5rem;">
@@ -376,7 +385,7 @@
         <header class="manager-header">
             <h2 style="margin: 0; font-size: 1.5rem; letter-spacing: 0.1em;">BASH_CONTROL_CENTER_V2.0</h2>
             <div style="display: flex; gap: 1.5rem; align-items: center;">
-                <a href="/" class="logout-link">RETURN TO HOME</a>
+                <a href="#" onclick="logout()" class="logout-link">RETURN TO HOME</a>
                 <button onclick="logout()" class="logout-link" style="background: none; border: 1px solid #333; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer;">LOGOUT</button>
             </div>
         </header>
@@ -524,7 +533,8 @@
 
         function logout() {
             sessionStorage.clear();
-            location.reload();
+            // Redirect with a cache-busting parameter to ensure a fresh load
+            window.location.href = '/?refresh=' + Date.now();
         }
 
         async function loadProjects() {

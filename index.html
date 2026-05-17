@@ -37,30 +37,30 @@
         <a href="#about">About</a>
         <a href="#webdev">Services</a>
         <a href="#projects">Projects</a>
-        <a href="#track" id="navTrack" style="display: none;">Track</a>
+        <a href="#track" id="navTrack">Track</a>
         <a href="#contact">Contact</a>
         <a href="./admin.html" class="auth-btn" style="background: rgba(255,255,255,0.05); color: var(--accent); border: 1px solid rgba(108, 242, 207, 0.3); text-decoration: none; display: inline-flex; align-items: center;">Admin</a>
       </nav>
-      <button class="auth-btn" id="authToggleBtn">Sign In</button>
+      <button class="auth-btn" id="authToggleBtn" onclick="window.openAuthModal()">Sign In</button>
     </header>
 
     <div class="auth-modal" id="authModal">
       <!-- ... existing auth modal content ... -->
       <div class="auth-modal-content">
-        <button class="auth-close" id="authClose">&times;</button>
+        <button class="auth-close" id="authClose" onclick="window.closeAuthModal()">&times;</button>
         <div class="auth-header">
           <h2 id="authTitle">Welcome Back</h2>
           <p id="authSubtitle">Sign in to your account</p>
         </div>
-        <form id="authForm">
+        <form id="authForm" autocomplete="off">
           <div class="auth-field" id="nameField" style="display: none;">
-            <input type="text" id="authName" placeholder="Full Name" />
+            <input type="text" id="authName" placeholder="Full Name" autocomplete="off" spellcheck="false" />
           </div>
           <div class="auth-field">
-            <input type="email" id="authEmail" placeholder="Email" required />
+            <input type="email" id="authEmail" placeholder="Email" required autocomplete="off" spellcheck="false" />
           </div>
           <div class="auth-field">
-            <input type="password" id="authPassword" placeholder="Password" required />
+            <input type="password" id="authPassword" placeholder="Password" required autocomplete="new-password" />
           </div>
           <button type="submit" class="auth-submit" id="authSubmit">Sign In</button>
         </form>
@@ -68,7 +68,7 @@
           <span>or continue with</span>
         </div>
         <div class="social-buttons">
-          <button class="social-btn" id="googleBtn">
+          <button class="social-btn" id="googleBtn" onclick="window.handleGoogleLogin()">
             <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
             Google
           </button>
@@ -79,7 +79,7 @@
         </div>
         <div class="auth-user" id="authUser" style="display: none;">
           <span id="userEmail"></span>
-          <button class="auth-signout" id="signOutBtn">Sign Out</button>
+          <button class="auth-signout" id="signOutBtn" onclick="window.handleSignOut()">Sign Out</button>
         </div>
         <p class="auth-message" id="authMessage"></p>
       </div>
@@ -89,7 +89,7 @@
     <div class="auth-modal" id="projectModal">
       <!-- ... existing project modal content ... -->
       <div class="auth-modal-content project-modal-content">
-        <button class="auth-close" id="projectClose">&times;</button>
+        <button class="auth-close" id="projectClose" onclick="window.closeProjectModal()">&times;</button>
         <div class="auth-header">
           <h2>Project Brief</h2>
           <p>Define your vision and build requirements</p>
@@ -152,7 +152,7 @@
     <!-- PDF Preview Modal -->
     <div class="auth-modal" id="previewModal">
       <div class="auth-modal-content project-modal-content" style="max-width: 900px; height: 90vh; display: flex; flex-direction: column;">
-        <button class="auth-close" id="previewClose">&times;</button>
+        <button class="auth-close" id="previewClose" onclick="window.closePreviewModal()">&times;</button>
         <div class="auth-header" style="margin-bottom: 1rem;">
           <h2>Brief Preview</h2>
           <p>Review your build initiation document</p>
@@ -162,7 +162,7 @@
         </div>
         <div style="display: flex; gap: 1rem; justify-content: flex-end;">
           <button class="auth-btn" id="downloadBrief" style="background: var(--accent); color: #000;">Download PDF</button>
-          <button class="auth-btn" id="closePreview" style="background: rgba(255,255,255,0.1); color: #fff;">Close</button>
+          <button class="auth-btn" id="closePreview" onclick="window.closePreviewModal()" style="background: rgba(255,255,255,0.1); color: #fff;">Close</button>
         </div>
       </div>
     </div>
@@ -182,7 +182,7 @@
           <div class="vignette"></div>
           <div class="screen-focus" id="screenFocus"></div>
           <div class="hero-actions">
-            <button class="btn-primary" id="registerWorkBtn">Build</button>
+            <button class="btn-primary" id="registerWorkBtn" onclick="window.handleBuildClick()">Build</button>
           </div>
         </section>
 
@@ -320,13 +320,13 @@
       </section>
 
       <!-- ── GATED CLIENT TRACKING ── -->
-      <section class="track-section" id="track" aria-label="Track Your Build" style="display: none;">
+      <section class="track-section" id="track" aria-label="Track Your Build">
         <div class="track-container" data-animate>
           <h2 class="track-title">TRACK YOUR BUILD</h2>
           <p style="color: #888; margin-bottom: 2rem;">Enter the email you used for your project brief to check its current build status.</p>
           <div class="track-input-group">
             <input type="email" id="trackEmail" class="track-input" placeholder="client@example.com" />
-            <button class="track-btn" id="trackBtn">CHECK STATUS</button>
+            <button class="track-btn" id="trackBtn" onclick="window.handleTrackClick()">CHECK STATUS</button>
           </div>
           <div id="trackResults" class="track-results">
             <!-- Tracking results will appear here -->
@@ -416,9 +416,179 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, sendPasswordResetEmail, signInWithRedirect, getRedirectResult } from \"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js\";
+      import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, sendPasswordResetEmail, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-      
+      // --- GLOBAL FUNCTIONS ---
+      window.showMessage = function(msg, isError = true) {
+        const authMessage = document.getElementById('authMessage');
+        if (authMessage) {
+          authMessage.textContent = msg;
+          authMessage.className = `auth-message ${isError ? 'error' : 'success'}`;
+        }
+      };
+
+      window.openAuthModal = function() {
+        console.log('Function openAuthModal called');
+        const modal = document.getElementById('authModal');
+        if (modal) {
+          // Clear any existing text in the inputs
+          const emailInput = document.getElementById('authEmail');
+          const passwordInput = document.getElementById('authPassword');
+          const nameInput = document.getElementById('authName');
+          if (emailInput) emailInput.value = '';
+          if (passwordInput) passwordInput.value = '';
+          if (nameInput) nameInput.value = '';
+
+          modal.style.display = 'flex';
+          setTimeout(() => modal.classList.add('active'), 10);
+          window.showMessage('');
+        } else {
+          console.error('Auth modal element not found!');
+        }
+      };
+
+      window.closeAuthModal = function() {
+        const modal = document.getElementById('authModal');
+        if (modal) {
+          modal.classList.remove('active');
+          setTimeout(() => modal.style.display = 'none', 300);
+        }
+      };
+
+      window.openProjectModal = function() {
+        console.log('Opening project modal');
+        const modal = document.getElementById('projectModal');
+        if (modal) {
+          modal.style.display = 'flex';
+          setTimeout(() => modal.classList.add('active'), 10);
+          const projectMessage = document.getElementById('projectMessage');
+          if (projectMessage) {
+            projectMessage.textContent = '';
+            projectMessage.className = 'auth-message';
+          }
+        }
+      };
+
+      window.closeProjectModal = function() {
+        const modal = document.getElementById('projectModal');
+        if (modal) {
+          modal.classList.remove('active');
+          setTimeout(() => modal.style.display = 'none', 300);
+        }
+      };
+
+      window.handleBuildClick = function() {
+        console.log('Build button clicked - Opening Login Panel');
+        window.openAuthModal();
+      };
+
+      window.handleSignInClick = function() {
+        console.log('Sign In button clicked');
+        // alert('Sign In button clicked');
+        window.openAuthModal();
+      };
+
+      window.handleGoogleLogin = async function() {
+        console.log('Global handleGoogleLogin called');
+        const googleBtn = document.getElementById('googleBtn');
+        const originalContent = googleBtn ? googleBtn.innerHTML : 'Google';
+        if (googleBtn) googleBtn.textContent = 'CONNECTING...';
+
+        try {
+          await window.signInWithPopup(window.auth, window.googleProvider);
+          window.closeAuthModal();
+          window.openProjectModal();
+        } catch (error) {
+          console.error("Google Auth Error:", error);
+          if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+            try {
+              await window.signInWithRedirect(window.auth, window.googleProvider);
+            } catch (redirErr) {
+              alert('Redirect sign-in failed. Please check browser permissions.');
+            }
+          } else {
+            window.showMessage(error.message.replace('Firebase:', '').trim());
+          }
+        } finally {
+          if (googleBtn) googleBtn.innerHTML = originalContent;
+        }
+      };
+
+      window.handleSignOut = async function() {
+        try {
+          await signOut(window.auth);
+          window.closeAuthModal();
+        } catch (error) {
+          console.error("Sign Out Error:", error);
+        }
+      };
+
+      window.handleTrackClick = async function() {
+        console.log('Tracking button clicked');
+        const trackEmailInput = document.getElementById('trackEmail');
+        const trackResults = document.getElementById('trackResults');
+        const trackBtn = document.getElementById('trackBtn');
+        const email = trackEmailInput ? trackEmailInput.value.trim() : '';
+
+        if (!email) {
+          alert('Please enter your email address.');
+          return;
+        }
+
+        if (trackBtn) {
+          trackBtn.disabled = true;
+          trackBtn.textContent = 'CONNECTING...';
+        }
+        if (trackResults) trackResults.innerHTML = '';
+
+        try {
+          console.log('Fetching status for:', email);
+          const res = await fetch(`/api/projects/track?email=${encodeURIComponent(email)}`);
+          const projects = await res.json();
+          console.log('Projects found:', projects);
+
+          if (projects.length === 0) {
+            if (trackResults) trackResults.innerHTML = '<p style="text-align: center; color: #666;">No active build requests found for this email.</p>';
+          } else {
+            projects.forEach(p => {
+              const status = (p.status || 'pending').toUpperCase();
+              const item = document.createElement('div');
+              item.className = 'track-item';
+              item.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <h4>${p.name}</h4>
+                  <span style="font-size: 0.7rem; color: #666;">INITIATED: ${new Date(p.timestamp).toLocaleDateString()}</span>
+                </div>
+                <div class="track-progress-container">
+                  <div class="track-progress-bar">
+                    <div class="track-progress-fill" style="width: 0%"></div>
+                  </div>
+                  <div class="track-status-text">
+                    <span>STATUS: ${status}</span>
+                    <span>${p.progress}% COMPLETE</span>
+                  </div>
+                </div>
+              `;
+              if (trackResults) trackResults.appendChild(item);
+              
+              // Trigger animation
+              setTimeout(() => {
+                const fill = item.querySelector('.track-progress-fill');
+                if (fill) fill.style.width = p.progress + '%';
+              }, 100);
+            });
+          }
+        } catch (err) {
+          console.error('Tracking Error:', err);
+          if (trackResults) trackResults.innerHTML = '<p style="text-align: center; color: var(--error);">Failed to sync with terminal. Check connection.</p>';
+        } finally {
+          if (trackBtn) {
+            trackBtn.disabled = false;
+            trackBtn.textContent = 'CHECK STATUS';
+          }
+        }
+      };
+
       const firebaseConfig = {
         apiKey: "AIzaSyDYb8rVWtHxvSUPmKjW4gTSO-RBobTJjqU",
         authDomain: "bash-auth-83ce4.firebaseapp.com",
@@ -432,6 +602,38 @@
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const googleProvider = new GoogleAuthProvider();
+      googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+      // Expose to window for global access
+      window.auth = auth;
+      window.googleProvider = googleProvider;
+      window.signInWithPopup = signInWithPopup;
+      window.signInWithRedirect = signInWithRedirect;
+
+      window.handleGoogleLogin = async function() {
+        console.log('Global handleGoogleLogin called');
+        const googleBtn = document.getElementById('googleBtn');
+        const originalContent = googleBtn.innerHTML;
+        googleBtn.textContent = 'CONNECTING...';
+
+        try {
+          await window.signInWithPopup(window.auth, window.googleProvider);
+          window.closeAuthModal();
+          window.openProjectModal();
+        } catch (error) {
+          console.error("Google Auth Error:", error);
+          alert("Login Error: " + error.message);
+          if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+            try {
+              await window.signInWithRedirect(window.auth, window.googleProvider);
+            } catch (redirErr) {
+              alert('Redirect sign-in failed. Please check browser permissions.');
+            }
+          }
+        } finally {
+          googleBtn.innerHTML = originalContent;
+        }
+      };
 
       // Check for redirect result on load
       getRedirectResult(auth).then((result) => {
@@ -443,7 +645,18 @@
         console.error("Redirect Auth Error:", error);
       });
 
-      window.addEventListener('DOMContentLoaded', () => {
+      window.addEventListener('load', () => {
+        console.log('Site fully loaded');
+
+        // Check for refresh parameter and clean URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('refresh')) {
+          console.log('Detected refresh from admin section');
+          // Clean the URL so it doesn't refresh again on next load
+          const newUrl = window.location.origin + window.location.pathname;
+          window.history.replaceState({}, document.title, newUrl);
+        }
+
         const authModal = document.getElementById('authModal');
         const authToggleBtn = document.getElementById('authToggleBtn');
         const authClose = document.getElementById('authClose');
@@ -463,6 +676,8 @@
         const socialButtons = document.querySelector('.social-buttons');
         const authSwitch = document.querySelector('.auth-switch');
         const registerWorkBtn = document.getElementById('registerWorkBtn');
+
+        console.log('Register button found:', !!registerWorkBtn);
 
         const forgotPasswordBtn = document.createElement('button');
         forgotPasswordBtn.id = 'forgotPasswordBtn';
@@ -487,51 +702,6 @@
 
         let isSignUp = false;
         let currentDoc = null; 
-
-        function openAuthModal() {
-          const modal = document.getElementById('authModal');
-          if (modal) {
-            modal.style.display = 'flex';
-            setTimeout(() => modal.classList.add('active'), 10);
-            showMessage('');
-          }
-        }
-
-        function closeAuthModal() {
-          const modal = document.getElementById('authModal');
-          if (modal) {
-            modal.classList.remove('active');
-            setTimeout(() => modal.style.display = 'none', 300);
-          }
-        }
-
-        function openProjectModal() {
-          const modal = document.getElementById('projectModal');
-          if (modal) {
-            modal.style.display = 'flex';
-            setTimeout(() => modal.classList.add('active'), 10);
-            projectMessage.textContent = '';
-            projectMessage.className = 'auth-message';
-          }
-        }
-
-        function closeProjectModal() {
-          const modal = document.getElementById('projectModal');
-          if (modal) {
-            modal.classList.remove('active');
-            setTimeout(() => modal.style.display = 'none', 300);
-          }
-        }
-
-        function openPreviewModal(docUrl) {
-          pdfViewer.src = docUrl;
-          previewModal.classList.add('active');
-        }
-
-        function closePreviewModal() {
-          previewModal.classList.remove('active');
-          pdfViewer.src = '';
-        }
 
         function updateAuthUI(user) {
           const trackSection = document.getElementById('track');
@@ -566,24 +736,6 @@
             if (navTrack) navTrack.style.display = 'none';
           }
           if (registerWorkBtn) registerWorkBtn.textContent = 'Build';
-        }
-
-        authToggleBtn.addEventListener('click', () => {
-          if (auth.currentUser) {
-            openAuthModal(); // Show account info / sign out
-          } else {
-            openAuthModal(); // Show sign in form
-          }
-        });
-
-        if (registerWorkBtn) {
-          registerWorkBtn.addEventListener('click', () => {
-            if (auth.currentUser) {
-              openProjectModal();
-            } else {
-              openAuthModal();
-            }
-          });
         }
 
         // Custom Select Logic
@@ -772,14 +924,15 @@
           projectMessage.className = 'auth-message';
 
           try {
-            const idToken = await auth.currentUser.getIdToken();
+            const headers = { 'Content-Type': 'application/json' };
+            if (auth.currentUser) {
+              const idToken = await auth.currentUser.getIdToken();
+              headers['Authorization'] = `Bearer ${idToken}`;
+            }
             
             const res = await fetch('/api/projects', {
               method: 'POST',
-              headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${idToken}`
-              },
+              headers: headers,
               body: JSON.stringify(payload)
             });
 
@@ -915,98 +1068,16 @@
           }
         });
 
-        googleBtn.addEventListener('click', async () => {
-          const originalContent = googleBtn.innerHTML;
-          googleBtn.textContent = 'CONNECTING...';
-
-          try {
-            // Try popup first
-            await signInWithPopup(auth, googleProvider);
-            closeAuthModal();
-            openProjectModal();
-          } catch (error) {
-            console.error("Google Auth Error:", error);
-            // Fallback to redirect if popup is blocked or fails
-            if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
-              try {
-                await signInWithRedirect(auth, googleProvider);
-              } catch (redirErr) {
-                showMessage('Sign-in failed. Please check browser permissions.');
-              }
-            } else {
-              showMessage(error.message.replace('Firebase:', '').trim());
-            }
-          } finally {
-            googleBtn.innerHTML = originalContent;
-          }
-        });
-
-        signOutBtn.addEventListener('click', async () => {
-          await signOut(auth);
-          closeAuthModal();
-        });
-
         onAuthStateChanged(auth, (user) => {
           updateAuthUI(user);
         });
 
-        // Tracking Logic
-        const trackBtn = document.getElementById('trackBtn');
-        const trackEmailInput = document.getElementById('trackEmail');
-        const trackResults = document.getElementById('trackResults');
-
-        if (trackBtn) {
-          trackBtn.addEventListener('click', async () => {
-            const email = trackEmailInput.value.trim();
-            if (!email) return;
-
-            trackBtn.disabled = true;
-            trackBtn.textContent = 'CONNECTING...';
-            trackResults.innerHTML = '';
-
-            try {
-              const res = await fetch(`/api/projects/track?email=${encodeURIComponent(email)}`);
-              const projects = await res.json();
-
-              if (projects.length === 0) {
-                trackResults.innerHTML = '<p style="text-align: center; color: #666;">No active build requests found for this email.</p>';
-              } else {
-                projects.forEach(p => {
-                  const status = (p.status || 'pending').toUpperCase();
-                  const item = document.createElement('div');
-                  item.className = 'track-item';
-                  item.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                      <h4>${p.name}</h4>
-                      <span style="font-size: 0.7rem; color: #666;">INITIATED: ${new Date(p.timestamp).toLocaleDateString()}</span>
-                    </div>
-                    <div class="track-progress-container">
-                      <div class="track-progress-bar">
-                        <div class="track-progress-fill" style="width: 0%"></div>
-                      </div>
-                      <div class="track-status-text">
-                        <span>STATUS: ${status}</span>
-                        <span>${p.progress}% COMPLETE</span>
-                      </div>
-                    </div>
-                  `;
-                  trackResults.appendChild(item);
-                  
-                  // Trigger animation
-                  setTimeout(() => {
-                    const fill = item.querySelector('.track-progress-fill');
-                    if (fill) fill.style.width = p.progress + '%';
-                  }, 100);
-                });
-              }
-            } catch (err) {
-              trackResults.innerHTML = '<p style="text-align: center; color: var(--error);">Failed to sync with terminal. Check connection.</p>';
-            } finally {
-              trackBtn.disabled = false;
-              trackBtn.textContent = 'CHECK STATUS';
-            }
-          });
-        }
+        // Auto-refresh the site after 1 minute (60,000 ms)
+        console.log('Auto-refresh timer set for 60 seconds');
+        setTimeout(() => {
+          console.log('Auto-refreshing page...');
+          window.location.reload();
+        }, 60000);
       });
     </script>
     <script src="./app.js?v=2.0"></script>

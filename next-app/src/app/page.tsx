@@ -1,3 +1,5 @@
+"use client";
+
 import { Show, SignInButton, SignIn } from "@clerk/nextjs";
 import dynamic from "next/dynamic";
 import TerminalAnimation from "@/components/TerminalAnimation";
