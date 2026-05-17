@@ -32,12 +32,17 @@
   <body>
     <header class="site-header" id="header">
       <a class="brand" href="#">&lt;/&gt;Bash</a>
-      <nav class="site-nav">
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="siteNav">
         <a href="#">Home</a>
         <a href="#about">About</a>
         <a href="#webdev">Services</a>
-        <a href="#projects">Projects</a>
         <a href="#track" id="navTrack">Track</a>
+        <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
         <a href="./admin.html" class="auth-btn" style="background: rgba(255,255,255,0.05); color: var(--accent); border: 1px solid rgba(108, 242, 207, 0.3); text-decoration: none; display: inline-flex; align-items: center;">Admin</a>
       </nav>

@@ -6,6 +6,25 @@ const wallpaperView = document.getElementById('wallpaperView');
 const screenFocus = document.getElementById('screenFocus');
 const animatedElements = document.querySelectorAll('[data-animate]');
 
+// Mobile Menu Toggle
+const menuToggle = document.getElementById('menuToggle');
+const siteNav = document.getElementById('siteNav');
+
+if (menuToggle && siteNav) {
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    siteNav.classList.toggle('active');
+  });
+
+  // Close menu when clicking links
+  siteNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menuToggle.classList.remove('active');
+      siteNav.classList.remove('active');
+    });
+  });
+}
+
 const state = {
   px: 0,
   py: 0,
@@ -250,7 +269,7 @@ async function loadMainProjects() {
   if (!grid) return;
 
   try {
-    const res = await fetch((window.location.hostname.includes('github.io') ? (localStorage.getItem('BASH_API_OVERRIDE') || 'https://bash-web.onrender.com') : '') + '/api/projects/public');
+    const res = await fetch('/api/projects/public');
     const projects = await res.json();
 
     if (projects.length === 0) {
