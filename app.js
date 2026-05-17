@@ -250,7 +250,7 @@ async function loadMainProjects() {
   if (!grid) return;
 
   try {
-    const res = await fetch('/api/projects/public');
+    const res = await fetch((window.location.hostname.includes('github.io') ? (localStorage.getItem('BASH_API_OVERRIDE') || 'https://bash-fix-99905.loca.lt') : '') + '/api/projects/public', { headers: { 'bypass-tunnel-reminder': 'true' } });
     const projects = await res.json();
 
     if (projects.length === 0) {
